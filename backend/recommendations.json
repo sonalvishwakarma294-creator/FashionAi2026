@@ -1,0 +1,388 @@
+{
+  "male": {
+    "casual": {
+      "rectangle": [
+        {
+          "title": "The Urban Minimalist",
+          "look": "Heavyweight white tee + Navy tapered chinos + White leather sneakers",
+          "advice": "Since you have a balanced frame, aim for a clean silhouette. Avoid oversized fits that hide your structure.",
+          "tips": ["Layer with a beige overshirt", "Roll the chinos slightly at the ankle", "Add a silver watch"]
+        },
+        {
+          "title": "Weekend Explorer",
+          "look": "Olive green utility jacket + Grey melange sweatshirt + Dark wash denim",
+          "advice": "Texture layering adds depth to a rectangular build. The jacket provides masculine shoulder structure.",
+          "tips": ["Rugged leather boots", "Keep the sweatshirt hem loose", "Earth tones work best here"]
+        }
+      ],
+      "athletic": [
+        {
+          "title": "Athletic Edge",
+          "look": "Fitted black henley + Khaki joggers + High-top sneakers",
+          "advice": "Highlight your broad shoulders but keep the bottom relaxed to balance your proportions.",
+          "tips": ["Henley buttons should be half-open", "Neutral tones to stay subtle", "Canvas cap for a sporty vibe"]
+        },
+        {
+          "title": "Sport Luxe",
+          "look": "Bomber jacket + Slim-fit white tee + Performance trousers",
+          "advice": "Bomber jackets accentuate your V-taper naturally. Keep the trousers slim but not tight to accommodate muscular legs.",
+          "tips": ["Clean white sneakers are mandatory", "Minimal branding", "Smart-watch accessory"]
+        }
+      ],
+      "apple": [
+        {
+          "title": "Smart Structure",
+          "look": "Vertical striped button-down (untucked) + Straight-leg dark jeans + Loafers",
+          "advice": "Vertical lines elongate your torso. Wearing the shirt untucked but structured hides the midsection without looking sloppy.",
+          "tips": ["Avoid large prints", "Darker colors on top slim the torso", "Focus on shoe quality"]
+        },
+        {
+          "title": "Relaxed Layers",
+          "look": "Open flannel shirt + Charcoal t-shirt + Relaxed fit chinos",
+          "advice": "Layering an open shirt creates vertical lines that break up the midsection visually.",
+          "tips": ["Keep the under-layer dark", "Avoid belts if possible", "Comfortable suede boots"]
+        }
+      ],
+      "pear": [
+        {
+          "title": "Shoulder Focus",
+          "look": "Structured denim jacket + Crew neck tee + Dark straight-leg pants",
+          "advice": "Draw attention upwards. A stiff denim jacket adds bulk to your shoulders, balancing your wider hips.",
+          "tips": ["Light colors on top, dark on bottom", "Avoid skinny jeans", "Chunky boots balance the leg width"]
+        },
+        {
+          "title": "The Classic Fit",
+          "look": "Boat neck sweater + Regular fit trousers + Minimalist sneakers",
+          "advice": "A boat neck widens the shoulder line visually. Regular fit trousers don't cling to the hips.",
+          "tips": ["Push up sleeves to show forearms", "Structured backpack", "Matte finish fabrics"]
+        }
+      ],
+      "hourglass": [
+        {
+          "title": "Tailored Casual",
+          "look": "Fitted polo shirt + Slim-straight jeans + Chelsea boots",
+          "advice": "Your balanced proportions allow for fitted styles. A polo complements your natural chest-to-waist ratio.",
+          "tips": ["Tuck in slightly at the front", "Belt is a must", "Classic sunglasses"]
+        },
+        {
+          "title": "Monochrome Sleek",
+          "look": "Black turtleneck + Black slim chinos + Grey overcoat",
+          "advice": "Monochrome creates a seamless, tall line. The overcoat frames your balanced build perfectly.",
+          "tips": ["Silver chain necklace", "Keep boots polished", "Groomed hairstyle"]
+        }
+      ]
+    },
+    "office": {
+      "rectangle": [
+        {
+          "title": "The Corporate Powerhouse",
+          "look": "Sky blue dress shirt + Charcoal trousers + Brown oxfords",
+          "advice": "A well-tailored shirt is key. Ensure the shoulder seams are perfect to avoid a boxy look.",
+          "tips": ["Leather belt matching the shoes", "Silk tie in navy", "Tucked in strictly"]
+        },
+        {
+          "title": "Business Creative",
+          "look": "Navy blazer + Grey turtleneck + Wool trousers",
+          "advice": "Replacing the shirt with a turtleneck adds volume to your frame and looks ultra-modern.",
+          "tips": ["Pocket square for flair", "Monk strap shoes", "Metal strap watch"]
+        }
+      ],
+      "athletic": [
+        {
+          "title": "The V-Taper Suit",
+          "look": "Made-to-measure Navy Suit + Crisp white shirt (no tie) + Loafers",
+          "advice": "Off-the-rack suits often fail athletic builds. Ensure the jacket waist is taken in to show your drop.",
+          "tips": ["Skip the tie to show neck muscles", "Pocket square is essential", "Unbutton top collar button"]
+        },
+        {
+          "title": "Smart Separates",
+          "look": "Textured grey blazer + Black chinos + Derby shoes",
+          "advice": "Separates work well for muscular legs as you can size pants independently from the jacket.",
+          "tips": ["Stretch-fabric chinos for comfort", "Knit tie adds texture", "Briefcase accessory"]
+        }
+      ],
+      "apple": [
+        {
+          "title": "Modern Executive",
+          "look": "Single-breasted dark suit + Vest/Waistcoat + Dark tie",
+          "advice": "A waistcoat creates a clean, flat surface over the midsection and looks incredibly sharp.",
+          "tips": ["Keep jacket unbuttoned when sitting", "Dark navy or charcoal", "Polished black shoes"]
+        },
+        {
+          "title": "Relaxed Friday",
+          "look": "Cardigan blazer + Gingham shirt + Comfort-waist trousers",
+          "advice": "Softer structured jackets (cardigan style) drape better over the midsection than stiff tailoring.",
+          "tips": ["Vertical patterns on shirt", "Elastic-sided belt for comfort", "Suede loafers"]
+        }
+      ],
+      "pear": [
+        {
+          "title": "The Upper Hand",
+          "look": "Double-breasted blazer + Flat front trousers + Brogues",
+          "advice": "Double-breasted jackets add significant width to the chest, perfectly balancing wider hips.",
+          "tips": ["Wide lapels are good", "Ensure trousers drape straight", "Avoid pleats in trousers"]
+        },
+        {
+          "title": "Sharp Casual",
+          "look": "Structured trench coat + Button-down shirt + Dark denim",
+          "advice": "A trench coat with shoulder tabs (epaulets) draws the eye up and structures the frame.",
+          "tips": ["Tie the belt loosely at back", "Brown leather accessories", "Clean grooming"]
+        }
+      ],
+      "hourglass": [
+        {
+          "title": "The Italian Cut",
+          "look": "Slim-fit grey suit + White spread-collar shirt + Black tie",
+          "advice": "Italian cuts are naturally slimmer at the waist, perfect for your build.",
+          "tips": ["Show 1/2 inch of shirt cuff", "Slim tie width", "Oxford shoes"]
+        },
+        {
+          "title": "Modern Classic",
+          "look": "White shirt + Navy trousers + Suspenders",
+          "advice": "Suspenders highlight a tapered waist better than a belt and add a vintage cool factor.",
+          "tips": ["Roll sleeves for work mode", "No belt with suspenders", "Classic watch"]
+        }
+      ]
+    },
+    "party": {
+      "rectangle": [
+        {
+          "title": "Rockstar Chic",
+          "look": "Black leather jacket + White graphic tee + Ripped black jeans",
+          "advice": "Leather adds bulk and attitude. The monochrome base makes you look taller.",
+          "tips": ["Chelsea boots are a must", "Silver rings/accessories", "Messy hair texture"]
+        }
+      ],
+      "athletic": [
+        {
+          "title": "Muscle Fit",
+          "look": "Short sleeve printed shirt + Tailored shorts + Loafers",
+          "advice": "Show off the arms and legs. A bold print draws attention to your developed upper body.",
+          "tips": ["Camp collar style", "Invisible socks", "Gold chain"]
+        }
+      ],
+      "apple": [
+        {
+          "title": "Dark & Dapper",
+          "look": "All-black ensemble: Black shirt + Black jeans + Charcoal blazer",
+          "advice": "Black is slimming and sophisticated. The blazer adds necessary structure.",
+          "tips": ["Unbutton top two buttons", "Suede boots for texture", "Statement watch"]
+        }
+      ],
+      "pear": [
+        {
+          "title": "Statement Top",
+          "look": "Bold bomber jacket + Simple black tee + Dark tapered jeans",
+          "advice": "Let the jacket do the talking. It squares off your shoulders while dark jeans slim the hips.",
+          "tips": ["White sneakers for contrast", "Keep jacket zipped halfway", "Minimal accessories"]
+        }
+      ],
+      "hourglass": [
+        {
+          "title": "Vintage Cool",
+          "look": "Suede jacket + Turtleneck + Slim trousers",
+          "advice": "Fitted layers highlight your natural V-taper. Suede adds a rich, party-ready texture.",
+          "tips": ["Earth tones (Tan/Brown)", "Leather boots", "Classic hairstyle"]
+        }
+      ]
+    }
+  },
+  "female": {
+    "casual": {
+      "hourglass": [
+        {
+          "title": "Chic Parisian",
+          "look": "Wrap-around blouse + High-waisted straight jeans + Tan mules",
+          "advice": "Your waist is your best asset. The wrap top accentuates your natural curves perfectly without being restrictive.",
+          "tips": ["Small gold hoop earrings", "Crossbody leather bag", "Light floral perfume"]
+        },
+        {
+          "title": "Vintage Denim",
+          "look": "Fitted bodysuit + Mom jeans + White sneakers",
+          "advice": "A bodysuit ensures no fabric bunching at the waist, highlighting your silhouette cleanly.",
+          "tips": ["Add a statement belt", "High ponytail", "Canvas tote bag"]
+        }
+      ],
+      "pear": [
+        {
+          "title": "Balanced boho",
+          "look": "Off-shoulder ruffled top + A-line midi skirt + Sandals",
+          "advice": "The off-shoulder neckline widens your shoulders to match your hips, creating perfect symmetry.",
+          "tips": ["Chunky necklace", "Wedges for height", "Flowy fabrics"]
+        },
+        {
+          "title": "Focus Up top",
+          "look": "Bright patterned blouse + Dark wash bootcut jeans + Ankle boots",
+          "advice": "Pattern on top draws the eye up. Bootcut jeans balance out wider hips effectively.",
+          "tips": ["Tuck in the blouse", "Statement earrings", "Structured handbag"]
+        }
+      ],
+      "apple": [
+        {
+          "title": "The Empire Line",
+          "look": "Empire waist tunic + Slim-fit leggings + Ballet flats",
+          "advice": "The empire waist sits at your narrowest point (under the bust) and flows over the midsection.",
+          "tips": ["Long pendant necklace", "Avoid heavy belts", "Soft fabrics"]
+        },
+        {
+          "title": "Structured flow",
+          "look": "Open waterfall cardigan + V-neck camisole + Straight leg jeans",
+          "advice": "Vertical lines from the cardigan and V-neck elongate the torso significantly.",
+          "tips": ["Monochrome inner layers", "Nude shoes to elongate legs", "Delicate bracelets"]
+        }
+      ],
+      "rectangle": [
+        {
+          "title": "Curve Creator",
+          "look": "Peplum top + Skinny jeans + Pointed flats",
+          "advice": "A peplum top instantly creates the illusion of hips and a waist where there are none.",
+          "tips": ["Statement necklace", "Clutch bag", "Bold lip color"]
+        },
+        {
+          "title": "Modern Classic",
+          "look": "Striped Breton top + Paperbag waist trousers + Canvas sneakers",
+          "advice": "The paperbag waist adds volume to hips and cinches the waist, creating shape.",
+          "tips": ["Red lipstick for a pop", "Roll up trouser hem", "Tuck the top in completely"]
+        }
+      ],
+      "athletic": [
+        {
+          "title": "Soft & Strong",
+          "look": "Halter neck top + Wide-leg linen trousers + Slides",
+          "advice": "Halter necks show off toned shoulders beautifully. Wide legs add volume to the lower body for balance.",
+          "tips": ["Oversized sunglasses", "Messy bun", "Hoop earrings"]
+        },
+        {
+          "title": "Feminine Edge",
+          "look": "Slip dress + Denim jacket tied at waist + White sneakers",
+          "advice": "Tying a jacket at the waist breaks up the straight line and adds curve definition.",
+          "tips": ["Layered delicate chains", "Anklet", "Natural makeup"]
+        }
+      ]
+    },
+    "office": {
+      "hourglass": [
+        {
+          "title": "The Executive Look",
+          "look": "Pencil skirt + Silk button-down + Pointed pumps",
+          "advice": "Structured pieces work best for professional settings while respecting your natural shape.",
+          "tips": ["Slim leather belt", "Structured tote bag", "Minimalist watch"]
+        },
+        {
+          "title": "Power Suit",
+          "look": "Belted blazer + Matching trousers + Silk camisole",
+          "advice": "A blazer with a built-in belt or cinched waist is ideal for maintaining your shape in a suit.",
+          "tips": ["Stud earrings", "Leather laptop bag", "Classic bun"]
+        }
+      ],
+      "pear": [
+        {
+          "title": "Modern Professional",
+          "look": "Statement collar blouse + Wide-leg trousers + Block heels",
+          "advice": "Wide-leg trousers skim over hips and thighs comfortably. A statement collar draws eyes upward.",
+          "tips": ["Tuck blouse in", "Structured handbag", "Bold watch"]
+        },
+        {
+          "title": "Color Block",
+          "look": "Light colored blazer + Black sheath dress + Nude pumps",
+          "advice": "A light blazer widens the upper body. The black dress slims the lower body.",
+          "tips": ["Shoulder pads in blazer", "Delicate necklace", "Sleek ponytail"]
+        }
+      ],
+      "apple": [
+        {
+          "title": "Corporate Chic",
+          "look": "Shift dress + Open front blazer + Low heels",
+          "advice": "Shift dresses bypass the waistline completely for a comfortable, professional fit.",
+          "tips": ["Long scarf", "Statement brooch", "Structured bag"]
+        },
+        {
+          "title": "Smart Comfort",
+          "look": "V-neck sweater + Mid-rise straight trousers + Loafers",
+          "advice": "V-necks open up the chest area. Straight trousers balance the silhouette.",
+          "tips": ["Avoid heavy fabrics", "Simple studs", "Professional tote"]
+        }
+      ],
+      "rectangle": [
+        {
+          "title": "Structured Style",
+          "look": "Double-breasted blazer + Cropped trousers + Mules",
+          "advice": "Double-breasted styles add width and shape to a straight torso.",
+          "tips": ["Contrasting buttons", "Bold colors", "Layered bracelets"]
+        },
+        {
+          "title": "The Wrap Dress",
+          "look": "Midi wrap dress + Knee-high boots",
+          "advice": "The diagonal line of a wrap dress visually carves out a waistline for you.",
+          "tips": ["Tie tightly", "Drop earrings", "Leather satchel"]
+        }
+      ],
+      "athletic": [
+        {
+          "title": "Soft Tailoring",
+          "look": "Silk blouse with bow + Pleated skirt + Kite heels",
+          "advice": "Soft fabrics like silk and details like bows soften a strong, athletic frame.",
+          "tips": ["Pastel colors", "Soft waves hairstyle", "Delicate rings"]
+        },
+        {
+          "title": "The Wide Stride",
+          "look": "Sleeveless turtleneck + High-waisted palazzo pants",
+          "advice": "Shows off toned arms while adding significant volume and movement to the lower body.",
+          "tips": ["Statement belt", "High heels mandatory", "Bold cuff bracelet"]
+        }
+      ]
+    },
+    "party": {
+      "hourglass": [
+        {
+          "title": "Evening Glamour",
+          "look": "Bodycon midi dress + Strappy heels + Clutch",
+          "advice": "Embrace the curves. A bodycon fit was literally made for your body type.",
+          "tips": ["Shapewear for smooth lines", "Red lip", "Chandelier earrings"]
+        }
+      ],
+      "pear": [
+        {
+          "title": "Fit & Flare",
+          "look": "A-line cocktail dress + Statement necklace + Pumps",
+          "advice": "Fitted waist and flared skirt is the golden formula for pear shapes.",
+          "tips": ["Highlight decolletage", "Shimmer on shoulders", "Elegant updo"]
+        }
+      ],
+      "apple": [
+        {
+          "title": "Show Some Leg",
+          "look": "Swing dress (short) + Knee-high boots + Long necklace",
+          "advice": "Highlight your legs, which are usually a great asset for apple shapes.",
+          "tips": ["Avoid waist belts", "Smokey eye makeup", "Textured tights"]
+        }
+      ],
+      "rectangle": [
+        {
+          "title": "Cut-Out Queen",
+          "look": "Side cut-out maxi dress + Metallic heels",
+          "advice": "Side cut-outs create an artificial waistline that looks incredibly convincing.",
+          "tips": ["Sleek straight hair", "Minimal jewelry", "Metallic clutch"]
+        }
+      ],
+      "athletic": [
+        {
+          "title": "Backless Beauty",
+          "look": "Backless satin gown + Delicate heels",
+          "advice": "Show off that strong back. It is an elegant and unexpected way to reveal skin.",
+          "tips": ["Updo to show back", "Drop earrings", "Highlight lotion on skin"]
+        }
+      ]
+    }
+  },
+  "general": {
+    "party": [
+      {
+        "title": "Evening Glamour",
+        "look": "Monochrome dark ensemble + Statement jacket + Metallic accessories",
+        "advice": "Focus on high-contrast textures like silk and leather for a premium night-out feel.",
+        "tips": ["One bold statement piece", "Polished footwear", "Focus on grooming/makeup"]
+      }
+    ]
+  }
+}

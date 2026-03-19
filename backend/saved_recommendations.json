@@ -1,0 +1,263 @@
+{
+  "sonalvishwakarma294@gmail.com": [
+    {
+      "type": "styling_guide",
+      "date": "3/14/2026",
+      "occasion": "office",
+      "gender": "female",
+      "body_type": "hourglass",
+      "personas": [
+        {
+          "advice": "Structured pieces work best for professional settings while respecting your natural shape.",
+          "look": "Pencil skirt + Silk button-down + Pointed pumps",
+          "tips": [
+            "Slim leather belt",
+            "Structured tote bag",
+            "Minimalist watch"
+          ],
+          "title": "The Executive Look"
+        },
+        {
+          "advice": "A blazer with a built-in belt or cinched waist is ideal for maintaining your shape in a suit.",
+          "look": "Belted blazer + Matching trousers + Silk camisole",
+          "tips": [
+            "Stud earrings",
+            "Leather laptop bag",
+            "Classic bun"
+          ],
+          "title": "Power Suit"
+        }
+      ],
+      "preferences": {
+        "gender": "female",
+        "occasion": "office",
+        "bodyType": "hourglass",
+        "skinToneImage": {},
+        "skinTone": "Deep"
+      },
+      "recommended_colors": [
+        "Gold",
+        "Royal Purple",
+        "Crimson"
+      ],
+      "fabrics": [
+        "Silk",
+        "Cotton",
+        "Linen"
+      ]
+    },
+    {
+      "type": "accessory_guide",
+      "date": "3/16/2026",
+      "detected_color": "Pink",
+      "detected_style": "Casual",
+      "recommendations": [
+        "Silver Necklace",
+        "Leather Handbag",
+        "Classic Watch",
+        "Stud Earrings",
+        "Silk Scarf",
+        "Gold Bracelet",
+        "Nude Heels",
+        "Statement Ring",
+        "Sunglasses",
+        "Belts",
+        "Ankle Boots",
+        "Clutch",
+        "Pearl Earrings",
+        "Hoops",
+        "Crossbody Bag"
+      ],
+      "gender": "female"
+    },
+    {
+      "type": "tone_report",
+      "date": "3/16/2026",
+      "detected_tone": "Light",
+      "skin_hex": "#ba8b74",
+      "recommended_colors": [
+        "Peach",
+        "Rose Gold",
+        "Ivory",
+        "Blush",
+        "Pastel Yellow",
+        "Champagne",
+        "Pearl White",
+        "Soft Coral",
+        "Shell Pink",
+        "Apricot",
+        "Cream",
+        "Powder Blue",
+        "Baby Blue",
+        "Mint Green",
+        "Light Pink",
+        "Soft Lavender",
+        "Pale Lilac",
+        "Sky Blue",
+        "Light Beige",
+        "Quartz"
+      ],
+      "fabrics": [
+        "Linen",
+        "Cotton",
+        "Silk",
+        "Georgette"
+      ],
+      "gender": "female"
+    },
+    {
+      "type": "accessory_guide",
+      "date": "3/19/2026",
+      "detected_color": "Charcoal",
+      "detected_style": "Formal",
+      "recommendations": [
+        "Leather Dress Watch",
+        "Cufflinks",
+        "Pocket Square",
+        "Leather Belt",
+        "Oxford Loafers",
+        "Tie Clip",
+        "Lapel Pin",
+        "Monogrammed Cufflinks",
+        "Dress Socks",
+        "Leather Briefcase",
+        "Stud Set",
+        "Silver Cufflinks",
+        "Dress Watch",
+        "Silk Pocket Square",
+        "Monocle Chain"
+      ],
+      "gender": "male"
+    }
+  ],
+  "xyz@gmail.com": [
+    {
+      "type": "styling_guide",
+      "date": "3/15/2026",
+      "occasion": "casual",
+      "gender": "male",
+      "body_type": "athletic",
+      "personas": [
+        {
+          "advice": "Highlight your broad shoulders but keep the bottom relaxed to balance your proportions.",
+          "look": "Fitted black henley + Khaki joggers + High-top sneakers",
+          "tips": [
+            "Henley buttons should be half-open",
+            "Neutral tones to stay subtle",
+            "Canvas cap for a sporty vibe"
+          ],
+          "title": "Athletic Edge"
+        },
+        {
+          "advice": "Bomber jackets accentuate your V-taper naturally. Keep the trousers slim but not tight to accommodate muscular legs.",
+          "look": "Bomber jacket + Slim-fit white tee + Performance trousers",
+          "tips": [
+            "Clean white sneakers are mandatory",
+            "Minimal branding",
+            "Smart-watch accessory"
+          ],
+          "title": "Sport Luxe"
+        }
+      ],
+      "preferences": {
+        "gender": "male",
+        "occasion": "casual",
+        "bodyType": "athletic",
+        "skinToneImage": {},
+        "skinTone": "Light"
+      },
+      "recommended_colors": [
+        "Peach",
+        "Rose Gold",
+        "Ivory",
+        "Blush",
+        "Pastel Yellow",
+        "Champagne",
+        "Pearl White",
+        "Soft Coral",
+        "Shell Pink",
+        "Apricot",
+        "Cream",
+        "Powder Blue",
+        "Baby Blue",
+        "Mint Green",
+        "Light Pink",
+        "Soft Lavender",
+        "Pale Lilac",
+        "Sky Blue",
+        "Light Beige",
+        "Quartz"
+      ],
+      "fabrics": [
+        "Linen",
+        "Cotton",
+        "Silk",
+        "Georgette"
+      ]
+    },
+    {
+      "type": "styling_guide",
+      "date": "3/15/2026",
+      "occasion": "office",
+      "gender": "female",
+      "body_type": "hourglass",
+      "personas": [
+        {
+          "advice": "Structured pieces work best for professional settings while respecting your natural shape.",
+          "look": "Pencil skirt + Silk button-down + Pointed pumps",
+          "tips": [
+            "Slim leather belt",
+            "Structured tote bag",
+            "Minimalist watch"
+          ],
+          "title": "The Executive Look"
+        },
+        {
+          "advice": "A blazer with a built-in belt or cinched waist is ideal for maintaining your shape in a suit.",
+          "look": "Belted blazer + Matching trousers + Silk camisole",
+          "tips": [
+            "Stud earrings",
+            "Leather laptop bag",
+            "Classic bun"
+          ],
+          "title": "Power Suit"
+        }
+      ],
+      "preferences": {
+        "gender": "female",
+        "occasion": "office",
+        "bodyType": "hourglass",
+        "skinToneImage": {},
+        "skinTone": "Olive"
+      },
+      "recommended_colors": [
+        "Mustard",
+        "Terracotta",
+        "Warm Gold",
+        "Copper",
+        "Bronze",
+        "Saffron",
+        "Amber",
+        "Burnt Orange",
+        "Mahogany",
+        "Rich Brown",
+        "Camel",
+        "Taupe",
+        "Ochre",
+        "Rust",
+        "Brick Red",
+        "Coral",
+        "Teal",
+        "Turquoise",
+        "Forest Green",
+        "Deep Maroon"
+      ],
+      "fabrics": [
+        "Linen",
+        "Cotton",
+        "Silk",
+        "Georgette"
+      ]
+    }
+  ]
+}

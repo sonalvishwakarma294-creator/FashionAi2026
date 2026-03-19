@@ -1,0 +1,41 @@
+{
+  "sonalvishwakarma294@gmail.com": [
+    {
+      "id": 63,
+      "image": "/images/office/o2.jpg",
+      "likes": 456,
+      "name": "Office Look #63",
+      "occasion": "Office"
+    },
+    {
+      "id": 57,
+      "name": "Casual Look #57",
+      "image": "/images/casual/c66.png",
+      "occasion": "Casual",
+      "likes": 456
+    },
+    {
+      "id": 1,
+      "name": "Casual Look #1",
+      "image": "/images/casual/c1.jpg",
+      "occasion": "Casual",
+      "likes": 456
+    }
+  ],
+  "xyz@gmail.com": [
+    {
+      "id": 40,
+      "name": "Casual Look #40",
+      "image": "/images/casual/c42.jpg",
+      "occasion": "Casual",
+      "likes": 123
+    },
+    {
+      "id": 7,
+      "name": "Casual Look #7",
+      "image": "/images/casual/c7.jpg",
+      "occasion": "Casual",
+      "likes": 678
+    }
+  ]
+}
