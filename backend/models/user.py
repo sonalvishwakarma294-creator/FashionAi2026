@@ -12,6 +12,7 @@ class User(db.Model):
     member_since = db.Column(db.String(50), nullable=False)
     avatar_url = db.Column(db.String(500), nullable=True)
     is_admin = db.Column(db.Boolean, default=False)
+    role = db.Column(db.String(20), default='user') # 'admin' or 'user'
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -23,5 +24,6 @@ class User(db.Model):
             'gender': self.gender,
             'member_since': self.member_since,
             'avatar_url': self.avatar_url,
-            'is_admin': self.is_admin
+            'is_admin': self.is_admin,
+            'role': self.role
         }

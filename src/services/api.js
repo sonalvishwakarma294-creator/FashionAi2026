@@ -33,11 +33,16 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401 || error.response?.status === 422) {
+      // Don't clear storage or redirect for login failures
+      if (error.config?.url?.includes('/auth/login')) {
+        return Promise.reject(error);
+      }
+
       // Token expired or invalid
       console.warn("Session expired or invalid token. Clearing storage.");
       localStorage.removeItem('fashionToken');
       localStorage.removeItem('fashionUser');
-      
+
       // If we're on a page that needs login (not Home, About, etc.)
       if (!['/', '/login', '/signup', '/about'].includes(window.location.pathname)) {
         window.location.href = '/login?msg=session_expired';
@@ -50,9 +55,8 @@ api.interceptors.response.use(
 export const authService = {
   login: (credentials) => api.post('/auth/login', credentials),
   register: (userData) => api.post('/auth/register', userData),
-  getProfile: () => api.get('/auth/protected'), // Using protected route as profile check
+  getProfile: () => api.get('/auth/profile'), // Using full profile route
 };
-
 export const userService = {
   getDashboardStats: () => api.get('/user/dashboard-stats'),
   updateProfile: (data) => api.put('/user/profile', data),
@@ -82,6 +86,16 @@ export const recommendationService = {
 
 export const chatService = {
   sendMessage: (message, gender, history) => api.post('/ai-chat', { message, gender, history }),
+};
+
+export const feedbackService = {
+  submit: (data) => api.post('/feedback', data),
+};
+
+export const adminService = {
+  getStats: () => api.get('/admin/stats'),
+  getUsers: () => api.get('/admin/users'),
+  getFeedback: () => api.get('/admin/feedback'),
 };
 
 export default api;

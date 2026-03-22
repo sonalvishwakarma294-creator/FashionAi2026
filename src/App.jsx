@@ -30,6 +30,12 @@ import Careers from './pages/Careers';
 import Press from './pages/Press';
 import Blog from './pages/Blog';
 import ColorMatch from './pages/ColorMatch';
+import Feedback from './pages/Feedback';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
+import Cookies from './pages/Cookies';
+import Help from './pages/Help';
+import Contact from './pages/Contact';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -80,6 +86,12 @@ function App() {
             <Route path="/careers" element={<Careers />} />
             <Route path="/press" element={<Press />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/feedback" element={<Feedback />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/cookies" element={<Cookies />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </AnimatePresence>
         <Footer />

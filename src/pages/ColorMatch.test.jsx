@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 // import { MemoryRouter } from 'react-router-dom';
 import ColorMatch from './ColorMatch';
-import * as axios from 'axios';
+import axios from 'axios';
 
-// Mock axios
-vi.mock('axios');
-const mockedAxios = vi.mocked(axios.default, true);
+// axios is already mocked in vitest.setup.js
+// We just need a reference to the mocked default export
+const mockedAxios = vi.mocked(axios, true);
 
 const mockColorResult = {
   complementary: ['Gold', 'White'],
@@ -22,35 +22,36 @@ describe('ColorMatch Component', () => {
   });
 
   it('renders color selector buttons', () => {
-  render(<ColorMatch />);
+    render(<ColorMatch />);
 
-    expect(screen.getByText('Navy Blue')).toBeInTheDocument();
-    expect(screen.getByText('Black')).toBeInTheDocument();
-    expect(screen.getByText('Generate Color Palette')).toBeInTheDocument();
+    expect(screen.getByTitle('Navy Blue')).toBeInTheDocument();
+    expect(screen.getByTitle('Black')).toBeInTheDocument();
+    expect(screen.getByText('Generate Palettes')).toBeInTheDocument();
   });
 
   it('selects color on button click', async () => {
-  render(<ColorMatch />);
+    render(<ColorMatch />);
 
-    const navyButton = screen.getByText('Navy Blue');
-    const goldButton = screen.getByText('Gold');
+    const navyButton = screen.getByTitle('Navy Blue');
+    const goldButton = screen.getByTitle('Gold');
 
     fireEvent.click(goldButton);
 
-    // Button styling changes (simplified check)
+    // Selected color is now #FFD700 (Gold)
     expect(goldButton).toBeInTheDocument();
   });
 
   it('calls API on generate click', async () => {
     render(<ColorMatch />);
 
-    const generateButton = screen.getByText('Generate Color Palette');
+    const generateButton = screen.getByText('Generate Palettes');
     fireEvent.click(generateButton);
 
     await waitFor(() => {
+      // The mock instance doesn't actually prepend the baseURL in this simple mock
       expect(mockedAxios.post).toHaveBeenCalledWith(
-        expect.stringContaining('/api/color-combinations'),
-        expect.objectContaining({ color: 'Navy Blue' })
+        expect.stringContaining('/color-combinations'),
+        expect.objectContaining({ color: '#001F3F' })
       );
     });
   });
@@ -58,21 +59,23 @@ describe('ColorMatch Component', () => {
   it('displays loading state', async () => {
     render(<ColorMatch />);
 
-    const generateButton = screen.getByText('Generate Color Palette');
+    const generateButton = screen.getByText('Generate Palettes');
     fireEvent.click(generateButton);
 
-    expect(screen.getByText('Analyzing Harmony...')).toBeInTheDocument();
+    // ColorMatch.jsx uses 'Analyzing...'
+    expect(screen.getByText(/Analyzing/i)).toBeInTheDocument();
   });
 
   it('shows results after API success', async () => {
     render(<ColorMatch />);
 
-    const generateButton = screen.getByText('Generate Color Palette');
+    const generateButton = screen.getByText('Generate Palettes');
     fireEvent.click(generateButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Gold')).toBeInTheDocument();
-      expect(screen.getByText('Complementary')).toBeInTheDocument();
+      // Use getAllByText because 'Gold' might appear in the result cards too
+      expect(screen.getAllByText(/Gold/i)[0]).toBeInTheDocument();
+      expect(screen.getByText(/Complementary/i)).toBeInTheDocument();
     });
   });
 
@@ -81,11 +84,11 @@ describe('ColorMatch Component', () => {
 
     render(<ColorMatch />);
 
-    const generateButton = screen.getByText('Generate Color Palette');
+    const generateButton = screen.getByText('Generate Palettes');
     fireEvent.click(generateButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Generate Color Palette')).toBeInTheDocument();
+      expect(screen.getByText('Generate Palettes')).toBeInTheDocument();
     });
   });
 });

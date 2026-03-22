@@ -1,5 +1,6 @@
 import { vi } from 'vitest';
 import { beforeEach } from 'vitest';
+import '@testing-library/jest-dom';
 
 // Mock IntersectionObserver for framer-motion
 const IntersectionObserverMock = vi.fn(() => ({
@@ -23,18 +24,24 @@ Object.defineProperty(window, 'localStorage', {
 
 // Mock axios in global scope
 vi.mock('axios', () => {
-  return {
-    default: {
-      create: vi.fn(() => ({
-        interceptors: {
-          request: { use: vi.fn() },
-          response: { use: vi.fn() },
-        },
-        get: vi.fn(),
-        post: vi.fn(),
-        put: vi.fn(),
-      })),
+  const mockInstance = {
+    interceptors: {
+      request: { use: vi.fn() },
+      response: { use: vi.fn() },
     },
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    delete: vi.fn(),
+    patch: vi.fn(),
+    create: vi.fn(),
+  };
+  
+  mockInstance.create.mockReturnValue(mockInstance);
+  
+  return {
+    default: mockInstance,
+    ...mockInstance
   };
 });
 

@@ -1,13 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import { FiBriefcase, FiUsers, FiAward, FiClock } from 'react-icons/fi';
 
 const Careers = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <Navbar />
       <motion.main 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -98,7 +95,6 @@ const Careers = () => {
           </div>
         </motion.section>
       </motion.main>
-      <Footer />
     </div>
   );
 };

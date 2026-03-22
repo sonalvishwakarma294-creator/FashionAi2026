@@ -1,13 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import { FiTrendingUp, FiAward, FiUsers, FiZap } from 'react-icons/fi';
 
 const Press = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      <Navbar />
       <motion.main 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -100,7 +97,6 @@ const Press = () => {
           </div>
         </motion.section>
       </motion.main>
-      <Footer />
     </div>
   );
 };

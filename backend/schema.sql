@@ -14,15 +14,26 @@ CREATE TABLE users (
   gender ENUM('male', 'female', 'other') DEFAULT 'female',
   member_since DATE NOT NULL,
   is_admin BOOLEAN DEFAULT FALSE,
+  role VARCHAR(20) DEFAULT 'user',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_email (email),
   INDEX idx_gender (gender)
 );
 
+-- Feedback table
+CREATE TABLE feedback (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  message TEXT NOT NULL,
+  rating INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Admins inherit from users (is_admin=true), or separate
-INSERT INTO users (name, email, hashed_password, gender, member_since, is_admin) VALUES 
-('Admin', 'admin@fashion.ai', '$2b$12$KIXp8Vq9g7YJ8z5XzK4L.uXzK7p8v9w0x1y2z3A4B5C6D7E8F9G0', 'other', '2024-01-01', TRUE)
+INSERT INTO users (name, email, hashed_password, gender, member_since, is_admin, role) VALUES 
+('Admin', 'admin@fashion.ai', '$2b$12$KIXp8Vq9g7YJ8z5XzK4L.uXzK7p8v9w0x1y2z3A4B5C6D7E8F9G0', 'other', '2024-01-01', TRUE, 'admin')
 ON DUPLICATE KEY UPDATE hashed_password=hashed_password;
 
 -- Outfits table (from gallery.json + metadata)

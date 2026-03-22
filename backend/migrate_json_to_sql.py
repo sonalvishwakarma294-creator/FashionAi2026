@@ -36,7 +36,9 @@ def migrate():
                             email=email,
                             hashed_password=pwd,
                             gender=u.get('gender', 'female'),
-                            member_since=u.get('memberSince', datetime.now().strftime("%B %Y"))
+                            member_since=u.get('memberSince', datetime.now().strftime("%B %Y")),
+                            is_admin=u.get('is_admin', False),
+                            role=u.get('role', 'user')
                         )
                         db.session.add(new_user)
             print("✅ Users migrated.")

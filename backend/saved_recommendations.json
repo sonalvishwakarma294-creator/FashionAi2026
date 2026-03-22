@@ -128,6 +128,58 @@
         "Monocle Chain"
       ],
       "gender": "male"
+    },
+    {
+      "type": "styling_guide",
+      "date": "19/03/2026",
+      "gender": "male",
+      "occasion": "casual",
+      "bodyType": "trapezoid",
+      "skinToneImage": {},
+      "avoid_colors": [
+        "Pure White",
+        "Stark Black",
+        "Icy Pastels"
+      ],
+      "detected_tone": "Medium/Wheatish",
+      "fabrics": [
+        "Linen",
+        "Cotton",
+        "Silk",
+        "Georgette"
+      ],
+      "personas": [
+        {
+          "advice": "You won the genetic lottery. Simple, fitted clothes look best. Don't hide your build with baggy fits.",
+          "look": "Fitted White Tee + Slim Selvedge Denim",
+          "title": "The Standard"
+        },
+        {
+          "advice": "Layering works well for you. The denim jacket adds structure, the hoodie adds comfort.",
+          "look": "Denim Jacket + Grey Hoodie + Chinos",
+          "title": "The Layered Look"
+        }
+      ],
+      "recommended_colors": [
+        "Teal",
+        "Emerald",
+        "Navy",
+        "Gold",
+        "Burgundy",
+        "Coral",
+        "Mustard",
+        "Khaki",
+        "Sapphire",
+        "Ochre",
+        "Taupe",
+        "Camel",
+        "Plum",
+        "Brick Red",
+        "Forest Green",
+        "Olive"
+      ],
+      "skin_hex": "#96654b",
+      "styling_tip": "Since you have a trapezoid frame, focus on fit around the shoulders."
     }
   ],
   "xyz@gmail.com": [

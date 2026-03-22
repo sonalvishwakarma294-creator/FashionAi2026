@@ -1,7 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import { FiClock, FiEye, FiHeart } from 'react-icons/fi';
 
 const Blog = () => {
@@ -34,7 +32,6 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
-      <Navbar />
       <motion.main 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -124,7 +121,6 @@ const Blog = () => {
           </div>
         </motion.div>
       </motion.main>
-      <Footer />
     </div>
   );
 };
