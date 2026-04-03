@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiArrowRight, FiArrowLeft, FiCheck, FiUser, FiCalendar, FiAward, FiInfo, FiZap, FiBox, FiSave, FiImage, FiUpload, FiDroplet, FiLayers, FiStar, FiXCircle, FiLayout, FiShield, FiTrendingUp } from 'react-icons/fi';
 import { accessoryService, recommendationService } from '../services/api';
+import { getColorHex } from '../utils/colorUtils';
 
 const BodyTypeVisual = ({ type }) => {
   const shapes = {
@@ -104,22 +105,6 @@ const Recommendations = () => {
       { id: 'inverted_triangle', name: 'Inverted Triangle' },
       { id: 'oval', name: 'Oval' },
     ]
-  };
-
-  const getColorHex = (colorName) => {
-    if (!colorName) return '#CCCCCC';
-    const normalizedName = colorName.toLowerCase().trim();
-    const colors = {
-      'peach': '#FFE5B4', 'rose gold': '#B76E79', 'ivory': '#FFFFF0', 'blush': '#FADADD',
-      'teal': '#008080', 'emerald': '#50C878', 'navy': '#000080', 'gold': '#FFD700',
-      'burgundy': '#800020', 'coral': '#FF7F50', 'mustard': '#FFDB58', 'khaki': '#C3B091',
-      'sapphire': '#0F52BA', 'ochre': '#CC7722', 'taupe': '#483C32', 'camel': '#C19A6B',
-      'plum': '#8E4585', 'charcoal': '#36454F', 'brick red': '#CB4154', 'mahogany': '#C04000',
-      'deep purple': '#301934', 'forest green': '#228B22', 'rust': '#B7410E', 'olive': '#808000',
-      'royal purple': '#7851A9', 'crimson': '#DC143C', 'ruby': '#E0115F', 'onyx': '#353839',
-      'jet black': '#000000', 'maroon': '#800000', 'white': '#FFFFFF', 'black': '#000000'
-    };
-    return colors[normalizedName] || '#CCCCCC';
   };
 
   const handleNext = () => {

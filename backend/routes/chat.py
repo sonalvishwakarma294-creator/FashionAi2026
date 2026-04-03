@@ -8,182 +8,165 @@ from dotenv import load_dotenv
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
 load_dotenv(env_path)
 
-chat_bp = Blueprint('chat', __name__, url_prefix='/api/ai-chat')
+chat_bp = Blueprint('chat', __name__)
 
 def get_groq_client():
-    """Groq is the primary engine: Fast, reliable, and high free-tier limits."""
     api_key = os.getenv("GROQ_API_KEY")
-    if not api_key or "gsk_" not in api_key:
-        return None
+    if not api_key or "gsk_" not in api_key: return None
     try:
-        # Groq is OpenAI-compatible
-        return OpenAI(
-            base_url="https://api.groq.com/openai/v1",
-            api_key=api_key
-        )
-    except:
-        return None
+        return OpenAI(base_url="https://api.groq.com/openai/v1", api_key=api_key)
+    except: return None
 
 def get_gemini_model():
-    """Gemini 1.5 Flash is the secondary stable fallback."""
     api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key or "AIza" not in api_key:
-        return None
+    if not api_key or "AIza" not in api_key: return None
     try:
         genai.configure(api_key=api_key)
         return genai.GenerativeModel('gemini-1.5-flash')
-    except:
-        return None
-
-def get_openai_client():
-    """Standard OpenAI as a tertiary backup."""
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key or "sk-" not in api_key:
-        return None
-    try:
-        return OpenAI(api_key=api_key)
-    except:
-        return None
+    except: return None
 
 SYSTEM_PROMPT = """
-You are 'StyleSync Pro', the world's most advanced AI Fashion Consultant and Celebrity Stylist. 
-Your goal is to provide elite-level, personalized fashion advice that blends deep technical knowledge with creative styling intuition.
+You are 'FashionPro AI', a highly intelligent and professional fashion stylist.
 
-CORE IDENTITY:
-- You are an expert in both Global High-Fashion (Milan, Paris, NYC) and Indian Contemporary/Ethnic Fashion.
-- You understand the psychology of clothing, color theory, and structural aesthetics.
-- You are not just a chatbot; you are a personal stylist who remembers trends, understands body types, and knows what's "In" right now.
+**CORE DIRECTIVES:**
+1. **GENDER, OCCASION & BODY TYPE**: Always provide advice tailored to the user's gender, occasion, and body type (Rectangle, Pear, Apple, Hourglass, Trapezoid).
+2. **OCCASION PRECISION**: If user says 'Party', recommend high-energy club/evening wear. If 'Office', recommend sharp formal/smart-casual.
+3. **FIT ADVICE**: Recommend specific fits (e.g., "A-line silhouettes for Pear shape to balance hips").
+4. **MANDATORY RESPONSE FORMAT**:
+✨ Outfit Recommendation:
+- Occasion: [Name]
+- Top: [Specific Item + Fit]
+- Bottom: [Specific Item + Fit]
+- Footwear: [Specific Item]
 
-KNOWLEDGE DOMAINS:
-1. FABRIC EXPERTISE: You know everything from Egyptian Cotton and Merino Wool to Chiffon, Brocade, and Sustainable Hemp. You suggest fabrics based on weather, comfort, and occasion.
-2. COLOR THEORY: You use the Color Wheel (Monochromatic, Complementary, Analogous, Triadic) and the 60-30-10 rule. You suggest colors that complement specific skin undertones (Warm, Cool, Neutral).
-3. BODY TYPES & SILHOUETTES: You provide advice for all body shapes (Hourglass, Pear, Apple, Rectangle, Inverted Triangle, Athletic). You know how to use vertical lines, layering, and proportions to enhance a look.
-4. OCCASION LOGIC: 
-   - Weddings: Detailed advice on Lehengas, Sherwanis, Tuxedos, and Indo-Western fusion.
-   - Corporate: Power dressing, semi-formal, and creative professional looks.
-   - Streetwear: Hypebeast trends, oversized fits, and sneaker culture.
-   - Seasonal: Layering for winters, breathable aesthetics for summers.
-5. ACCESSORIZING: You suggest the perfect watch, jewelry, belt, bag, or eyewear to complete the ensemble.
-6. FOOTWEAR: From Brogues and Loafers to Stilettos and limited-edition Sneakers.
+💡 Fit Advice (for {body_type} body):
+- [Specific reason why this look works for this body type]
 
-CONVERSATION & TONE:
-- TONE: Professional, sophisticated, encouraging, and highly creative.
-- LANGUAGE: Use a natural, high-fashion mix of English and Hinglish. 
-  *   If the user asks "Shadi me kya pehnu?", don't just say "Wear a suit." 
-  *   Say: "Shaadi ke liye is season **Pastel Lehengas** ya **Silk Sherwanis** bohot trend me hain. Aap floral embroidery try kar sakte hain for a modern touch. Accessorize with a statement watch or traditional jewelry!"
-- FORMATTING: Use **Bold Text** for key items, bullet points for clarity, and occasional emojis for a premium feel.
+🎨 Best Colors:
+- [15-20 specific colors]
 
-RESPONSE RULES:
-- ALWAYS consider the user's gender (provided in the prompt).
-- Give detailed, structured advice. Don't be too brief. If someone asks for a look, give them the top, bottom, shoes, and one accessory.
-- If a user is confused, ask clarifying questions (e.g., "What is the venue?", "What's the vibe?").
-- Act as if you have full access to current fashion magazines and celebrity lookbooks.
+🧵 Fabric & 👜 Accessories:
+- [Details]
 """
 
-@chat_bp.route('', methods=['POST'])
+@chat_bp.route('/api/ai-chat', methods=['POST'])
 def ai_chat():
     data = request.json
     user_message = data.get('message', '').strip()
     gender = data.get('gender', 'female').lower()
     history = data.get('history', [])
+    style_preference = data.get('style_preference', 'Casual')
+    skin_tone = data.get('skin_tone')
+    body_type = data.get('body_type', 'Rectangle')
+    passed_occasion = data.get('occasion')
+    weather = data.get('weather')
     
-    # --- 1. TRY GROQ (Primary - High Speed & Free) ---
+    if not user_message:
+        return jsonify({'reply': "How can I help you today? 😊", 'engine': 'none'})
+
+    msg_lower = user_message.lower()
+    occasion_map = {
+        'shadi': 'wedding', 'marriage': 'wedding', 'wedding': 'wedding',
+        'office': 'office', 'work': 'office', 'formal': 'office',
+        'party': 'party', 'club': 'party', 'night out': 'party',
+        'casual': 'casual', 'everyday': 'casual',
+        'college': 'college', 'university': 'college', 'class': 'college',
+        'date': 'date', 'romantic': 'date',
+        'festival': 'festival', 'diwali': 'festival', 'eid': 'festival',
+        'travel': 'travel', 'vacation': 'travel', 'trip': 'travel'
+    }
+    detected_occasion = next((occasion_map.get(k) for k in occasion_map if k in msg_lower), None)
+    final_occasion = passed_occasion or detected_occasion
+    
+    context_notes = [f"User is {gender}.", f"Style: {style_preference}.", f"Body Type: {body_type}.", f"Skin Tone: {skin_tone or 'Not specified'}."]
+    if final_occasion: context_notes.append(f"Occasion: {final_occasion}")
+    if weather: context_notes.append(f"Weather: {weather}")
+    
+    full_system_prompt = f"{SYSTEM_PROMPT.format(body_type=body_type)}\n\nUSER PROFILE:\n" + "\n".join(context_notes)
+    
     groq_client = get_groq_client()
     if groq_client:
         try:
-            messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+            messages = [{"role": "system", "content": full_system_prompt}]
             for msg in history:
-                messages.append({"role": "user" if msg.get('type') == 'user' else "assistant", "content": msg.get('text', '')})
-            messages.append({"role": "user", "content": f"User Gender: {gender}. Message: {user_message}"})
-            
-            response = groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=messages,
-                max_tokens=500
-            )
+                role = "user" if msg.get('type') == 'user' else "assistant"
+                content = msg.get('text', '')
+                if content: messages.append({"role": role, "content": content})
+            messages.append({"role": "user", "content": user_message})
+            response = groq_client.chat.completions.create(model="llama-3.3-70b-versatile", messages=messages, max_tokens=1000, temperature=0.6)
             return jsonify({'reply': response.choices[0].message.content, 'engine': 'groq'})
-        except Exception as e:
-            print(f"DEBUG: Groq failed: {e}")
+        except Exception as e: print(f"DEBUG: Groq failed: {e}")
 
-    # --- 2. TRY GEMINI (Secondary Fallback) ---
-    gemini_model = get_gemini_model()
-    if gemini_model:
-        try:
-            context = f"{SYSTEM_PROMPT}\nUser Gender: {gender}\n"
-            for msg in history:
-                role = "User" if msg.get('type') == 'user' else "Assistant"
-                context += f"{role}: {msg.get('text', '')}\n"
-            context += f"User: {user_message}\nAssistant:"
-            
-            response = gemini_model.generate_content(context)
-            if response and response.text:
-                return jsonify({'reply': response.text, 'engine': 'gemini'})
-        except Exception as e:
-            print(f"DEBUG: Gemini failed: {e}")
+    return professional_fallback_chat(user_message, gender, style_preference, skin_tone, final_occasion, weather, body_type)
 
-    # --- 3. TRY OPENAI (Tertiary Fallback) ---
-    openai_client = get_openai_client()
-    if openai_client:
-        try:
-            messages = [{"role": "system", "content": SYSTEM_PROMPT}]
-            for msg in history:
-                messages.append({"role": "user" if msg.get('type') == 'user' else "assistant", "content": msg.get('text', '')})
-            messages.append({"role": "user", "content": f"Gender: {gender}. Message: {user_message}"})
-            
-            response = openai_client.chat.completions.create(model="gpt-3.5-turbo", messages=messages)
-            return jsonify({'reply': response.choices[0].message.content, 'engine': 'openai'})
-        except Exception as e:
-            print(f"DEBUG: OpenAI failed: {e}")
-
-    # --- 4. ULTIMATE LOCAL FALLBACK (No API needed) ---
-    return professional_fallback_chat(user_message, gender)
-
-def professional_fallback_chat(user_message, gender):
+def professional_fallback_chat(user_message, gender, style='Minimalist', skin_tone=None, occasion=None, weather=None, body_type='Rectangle'):
     msg = user_message.lower()
+    weather_context = (weather or "hot").lower()
+    occasion_context = (occasion or "casual").lower()
+    gender_display = gender.title() if gender else "Female"
+    body_display = body_type.title() if body_type else "Rectangle"
     
-    # Pre-defined expert responses for common queries
-    if any(k in msg for k in ["shadi", "wedding", "marriage", "function"]):
-        if gender == 'female':
-            reply = """
-For a wedding, I recommend a **Pastel-colored Lehenga** with intricate Zari work or a **Classic Silk Saree** in Jewel tones (like Emerald Green or Royal Blue). 
-- **Fabric:** Chiffon or Organza for a lightweight feel, or Banarasi Silk for a traditional look.
-- **Accessory:** Statement Kundan jewelry and a matching clutch.
-- **Footwear:** Embellished Juttis or Metallic Stilettos.
-"""
-        else:
-            reply = """
-For a wedding, a **Slim-fit Sherwani** in Cream or Navy is a timeless choice. If it's a reception, a **Tailored Tuxedo** or a 3-piece Suit would be perfect.
-- **Fabric:** Velvet for winters or Raw Silk for a premium texture.
-- **Accessory:** A contrasting pocket square and a classic watch.
-- **Footwear:** Tan Oxfords or Patent Leather Loafers.
-"""
-    elif any(k in msg for k in ["office", "work", "interview", "presentation"]):
-        reply = """
-Professionalism is all about **Structured Silhouettes**. I suggest a **Neutral Blazer** (Grey/Navy) paired with tailored trousers or a pencil skirt.
-- **Logic:** Stick to the 60-30-10 rule with neutral tones to project confidence.
-- **Fabric:** Breathable Cotton-Blends or Fine Wool.
-- **Accessory:** A minimalist leather belt and a professional laptop bag.
-"""
-    elif any(k in msg for k in ["casual", "daily", "weekend", "outing"]):
-        reply = """
-For a relaxed yet stylish look, go for **Elevated Basics**. Try **Straight-fit Denims** with a high-quality monochrome T-shirt or a relaxed linen shirt.
-- **Vibe:** Minimalist and comfortable.
-- **Fabric:** 100% Organic Cotton or Linen.
-- **Footwear:** Clean White Sneakers or Chelsea Boots.
-"""
-    elif any(k in msg for k in ["color", "skin", "suit"]):
-        reply = """
-Choosing the right color depends on your **Skin Undertone**:
-- **Warm Undertone:** Earthy tones like Olive Green, Mustard Yellow, and Warm Reds.
-- **Cool Undertone:** Royal Blue, Emerald Green, and Lavender.
-- **Neutral Undertone:** You can carry off almost anything, but muted tones look exceptionally elegant.
-Try the **Monochromatic look** for a sophisticated, elongated silhouette!
-"""
-    else:
-        reply = """
-That's a great fashion query! While I'm refining my latest trend data, remember that **Fit is King**. 
-Always ensure your clothes complement your body type (like Hourglass, Rectangle, or Athletic). 
-Focus on **Color Harmony** and don't be afraid to experiment with **Texture Layering** (pairing different fabrics like denim and corduroy) to add depth to your look!
-"""
+    fit_advice = ""
+    if body_display == "Pear": fit_advice = "Focus on adding volume to your upper body with structured tops to balance your wider hips."
+    elif body_display == "Apple": fit_advice = "Empire waists and V-necks help elongate your torso. Use structured fabrics."
+    elif body_display == "Hourglass": fit_advice = "Highlight your waist! Use belts and wrap-style tops to show off your curves."
+    elif body_display == "Rectangle": fit_advice = "Create curves using peplum tops and layers. Tucking in your shirt defines your waist."
+    elif body_display == "Trapezoid": fit_advice = "Stick to slim-fit tailored pieces that highlight your balanced proportions."
+
+    colors_map = {
+        'Fair': 'Pastels, Light Blue, Peach, Mint Green, Lavender, Silver, Rose Pink, Baby Yellow, Soft Grey, Ivory, Emerald Green, Royal Blue',
+        'Medium': 'Olive Green, Mustard, Navy Blue, Maroon, Burnt Orange, Forest Green, Charcoal, Gold, Terracotta, Plum, Deep Purple',
+        'Dark': 'Bright Red, Royal Blue, Lemon Yellow, Pure White, Gold, Silver, Magenta, Tangerine, Electric Lime, Fuchsia, Cobalt'
+    }
+
+    # FULL OCCASION MATRIX
+    top, bottom, shoes, accessories = "", "", "", ""
     
-    return jsonify({'reply': reply, 'engine': 'fallback'})
+    if "wedding" in occasion_context:
+        if gender == 'female': top, bottom, shoes, accessories = "Embroidered Silk Kurta", "Lehenga Skirt", "Golden Juttis", "Kundan Earrings"
+        else: top, bottom, shoes, accessories = "Maroon Sherwani", "White Churidar", "Traditional Mojaris", "Pocket Square"
+    elif "party" in occasion_context:
+        if gender == 'female': top, bottom, shoes, accessories = "Sequin Bodycon Dress", "Nude Stockings (Optional)", "Pointed Heels", "Statement Necklace"
+        else: top, bottom, shoes, accessories = "Black Slim Fit Shirt", "Dark Grey Trousers", "Chelsea Boots", "Stylish Watch"
+    elif "office" in occasion_context:
+        if gender == 'female': top, bottom, shoes, accessories = "Silk Blouse", "Pencil Skirt", "Nude Heels", "Classic Watch"
+        else: top, bottom, shoes, accessories = "Light Blue Formal Shirt", "Navy Chinos", "Brown Loafers", "Leather Laptop Bag"
+    elif "college" in occasion_context:
+        if gender == 'female': top, bottom, shoes, accessories = "Graphic Tee + Denim Jacket", "High-waist Mom Jeans", "White Sneakers", "Backpack"
+        else: top, bottom, shoes, accessories = "Oversized Hoodie", "Relaxed Cargo Pants", "Chunky Sneakers", "Cap"
+    elif "date" in occasion_context:
+        if gender == 'female': top, bottom, shoes, accessories = "Off-shoulder Floral Top", "Skinny Jeans", "Strappy Sandals", "Crossbody Bag"
+        else: top, bottom, shoes, accessories = "Polo Shirt", "Slim Fit Chinos", "White Leather Sneakers", "Minimal Watch"
+    elif "travel" in occasion_context:
+        top, bottom, shoes, accessories = "Breathable Cotton Tee", "Joggers", "Walking Shoes", "Sunglasses & Waist Bag"
+    elif "festival" in occasion_context:
+        if gender == 'female': top, bottom, shoes, accessories = "Anarkali Suit", "Matching Leggings", "Embellished Juttis", "Jhumkas"
+        else: top, bottom, shoes, accessories = "Short Kurta", "Blue Denim", "Kolhapuris", "Ethnic Watch"
+    else: # Casual
+        if gender == 'female': top, bottom, shoes, accessories = "Floral Summer Dress", "Denim Jacket", "White Sneakers", "Tote Bag"
+        else: top, bottom, shoes, accessories = "White Classic Shirt", "Blue Slim Jeans", "White Sneakers", "Leather Belt"
+
+    fabrics = "Wool, Fleece" if weather_context == "cold" else "Polyester Blend" if weather_context == "rainy" else "Linen, Cotton"
+    selected_tone = skin_tone.title() if skin_tone else "Medium"
+    
+    reply = f"""### Style Analysis for **{gender_display}** ({body_display} Body)
+
+✨ **Outfit Recommendation**:
+- Occasion: **{occasion_context.title()}**
+- Top: **{top}**
+- Bottom: **{bottom}**
+- Footwear: **{shoes}**
+
+💡 **Fit Advice**:
+- {fit_advice}
+
+🎨 **Best Colors ({selected_tone})**:
+- {colors_map.get(selected_tone, colors_map['Medium'])}
+
+🧵 **Fabric Suggestion**:
+- **{fabrics}** (Perfect for {weather_context} weather)
+
+👜 **Accessories**:
+- {accessories}
+"""
+    return jsonify({'reply': reply, 'engine': 'fallback', 'quick_replies': ['Outfit Ideas', 'Color Suggestions', 'Accessories Match']})

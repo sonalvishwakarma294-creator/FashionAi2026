@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiUpload, FiCheck, FiImage, FiRefreshCw, FiStar, FiInfo, FiTag, FiShoppingBag, FiWatch, FiBriefcase, FiUser, FiSave, FiAlertCircle } from 'react-icons/fi';
 import { accessoryService, recommendationService } from '../services/api';
+import { getColorHex } from '../utils/colorUtils';
 
 const AccessoryMatch = () => {
   const [image, setImage] = useState(null);
@@ -10,6 +12,7 @@ const AccessoryMatch = () => {
   const [result, setResult] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const [error, setError] = useState(null);
+  const [activeStyle, setActiveStyle] = useState(null); // Track user-corrected style
   const fileInputRef = useRef(null);
 
   const [detectedColor, setDetectedColor] = useState('');
@@ -28,6 +31,7 @@ const AccessoryMatch = () => {
     setResult(null);
     setIsSaved(false);
     setError(null);
+    setActiveStyle(null);
     try {
       const formData = new FormData();
       formData.append('image', file);
@@ -41,6 +45,7 @@ const AccessoryMatch = () => {
       // Simulate professional analysis delay for UX
       setTimeout(() => {
         setResult(res.data);
+        setActiveStyle(res.data.detected_style);
         setAnalyzing(false);
       }, 2000);
     } catch (error) {
@@ -48,6 +53,35 @@ const AccessoryMatch = () => {
       setError('System malfunction during visual analysis. Please retry.');
       setAnalyzing(false);
     }
+  };
+
+  // Function to handle manual style correction
+  const handleStyleCorrection = (newStyle) => {
+    setActiveStyle(newStyle);
+    // In a real production app, we would send this back to the server to 'train' the ML model
+    console.log(`AI Feedback: User corrected ${result.detected_style} to ${newStyle}`);
+  };
+
+  const getRecommendationsForStyle = () => {
+    if (!result) return [];
+    
+    // If the user corrected the style, we fetch the corresponding list
+    const recommendationsMap = {
+      'female': {
+        'Formal': ["Pearl Studs", "Structured Bag", "Classic Watch", "Nude Heels", "Silk Scarf"],
+        'Casual': ["Hoop Earrings", "Tote Bag", "Sneakers", "Leather Belt", "Sunglasses"],
+        'Ethnic': ["Jhumkas", "Bangles", "Potli Bag", "Embellished Juttis", "Maang Tikka"],
+        'Party': ["Statement Necklace", "Clutch Bag", "Stilettos", "Cocktail Ring", "Shimmer Scarf"]
+      },
+      'male': {
+        'Formal': ["Leather Watch", "Cufflinks", "Pocket Square", "Oxford Shoes", "Silk Tie"],
+        'Casual': ["Sports Watch", "Sneakers", "Baseball Cap", "Leather Bracelet", "Backpack"],
+        'Ethnic': ["Brooch", "Mojaris", "Turban Pin", "Silk Pocket Square", "Beaded Mala"],
+        'Party': ["Velvet Loafers", "Designer Watch", "Cravat", "Chelsea Boots", "Silver Bracelet"]
+      }
+    };
+
+    return recommendationsMap[selectedGender][activeStyle] || result.recommendations;
   };
 
   const saveToProfile = async () => {
@@ -162,21 +196,35 @@ const AccessoryMatch = () => {
                   <div className="flex flex-col md:flex-row justify-between items-start gap-8">
                     <div className="bg-white dark:bg-gray-900 rounded-[3rem] p-10 border border-gray-100 dark:border-gray-700 shadow-xl flex-1 w-full">
                         <span className="text-secondary font-black uppercase text-[10px] mb-6 block">Analysis Metrics</span>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
                             <div className="space-y-2">
                               <span className="text-[10px] font-black uppercase opacity-40 block">Detected Color</span>
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-full border-2 border-white dark:border-gray-800 shadow-md" style={{ backgroundColor: result.detected_color.toLowerCase().replace(' ', '') }} />
-                                <span className="text-xl font-black uppercase tracking-tighter">{result.detected_color}</span>
+                              <div className="flex items-center gap-2">
+                                <div className="w-4 h-4 rounded-full border border-white dark:border-gray-800" style={{ backgroundColor: getColorHex(result.detected_color) }} />
+                                <span className="text-sm font-black uppercase tracking-tighter">{result.detected_color}</span>
                               </div>
                             </div>
                             <div className="space-y-2">
+                              <span className="text-[10px] font-black uppercase opacity-40 block">Garment Type</span>
+                              <span className="text-sm font-black uppercase tracking-tighter truncate block" title={result.detected_item}>{result.detected_item}</span>
+                            </div>
+                            <div className="space-y-2">
                               <span className="text-[10px] font-black uppercase opacity-40 block">User Profile</span>
-                              <span className="text-xl font-black uppercase text-secondary tracking-tighter">{result.gender}</span>
+                              <span className="text-sm font-black uppercase text-secondary tracking-tighter">{result.gender}</span>
                             </div>
                             <div className="space-y-2">
                               <span className="text-[10px] font-black uppercase opacity-40 block">Style Matrix</span>
-                              <span className="text-xl font-black uppercase tracking-tighter">{result.detected_style}</span>
+                              <div className="flex flex-wrap gap-1">
+                                {['Formal', 'Casual', 'Ethnic', 'Party'].map(style => (
+                                  <button
+                                    key={style}
+                                    onClick={() => handleStyleCorrection(style)}
+                                    className={`px-2 py-1 rounded-md text-[9px] font-black uppercase transition-all ${activeStyle === style ? 'bg-secondary text-white shadow-md' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 hover:bg-gray-200'}`}
+                                  >
+                                    {style}
+                                  </button>
+                                ))}
+                              </div>
                             </div>
                         </div>
                     </div>
@@ -194,12 +242,12 @@ const AccessoryMatch = () => {
                           <span className="text-[10px] font-black opacity-30 uppercase tracking-widest">{result.recommendations.length} Components</span>
                         </div>
                         <div className="grid md:grid-cols-2 gap-x-12 gap-y-2">
-                          {result.recommendations.map((item, idx) => (
+                          {getRecommendationsForStyle().map((item, idx) => (
                             <motion.div 
                               initial={{ opacity: 0, y: 20 }} 
                               animate={{ opacity: 1, y: 0 }} 
                               transition={{ delay: idx * 0.05 + 0.5 }} 
-                              key={idx} 
+                              key={`${activeStyle}-${idx}`} 
                               className="flex items-center gap-4 py-4 border-b border-white/5 group/item hover:border-secondary transition-colors"
                             >
                               <span className="text-[9px] font-black opacity-10 group-hover/item:opacity-100 group-hover/item:text-secondary transition-all">
@@ -216,6 +264,29 @@ const AccessoryMatch = () => {
                       <FiShoppingBag size={400} />
                     </div>
                   </div>
+
+                  {/* AI Advice Card */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 }}
+                    className="bg-secondary/10 border border-secondary/20 p-8 rounded-[2.5rem] flex items-start gap-6"
+                  >
+                    <div className="w-12 h-12 rounded-2xl bg-secondary text-white flex items-center justify-center shrink-0 shadow-lg">
+                      <FiInfo size={24} />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black uppercase tracking-widest mb-2 text-secondary">
+                        {activeStyle !== result.detected_style ? "Refined Stylist's Pro Tip" : "Stylist's Pro Tip"}
+                      </h4>
+                      <div className="text-text dark:text-gray-300 font-medium leading-relaxed">
+                        {activeStyle === 'Ethnic' && `Since you are wearing a **${result.detected_item}**, traditional accessories will enhance the royal look. Focus on intricate jewelry!`}
+                        {activeStyle === 'Party' && `Since you are wearing a **${result.detected_item}**, go bold with your accessories. A statement piece will make you stand out!`}
+                        {activeStyle === 'Formal' && `For this **${result.detected_item}**, we recommend a structured approach. Minimalist and high-quality items work best.`}
+                        {activeStyle === 'Casual' && `This **${result.detected_item}** look works best with effortless accessories like a cool tote and classic sneakers.`}
+                      </div>
+                    </div>
+                  </motion.div>
                 </motion.div>
               ) : (
                 <div className="h-full min-h-[600px] flex flex-col items-center justify-center bg-gray-50/50 dark:bg-gray-900/30 rounded-[4rem] border-2 border-dashed border-gray-200 dark:border-gray-800 p-20 text-center relative overflow-hidden group">

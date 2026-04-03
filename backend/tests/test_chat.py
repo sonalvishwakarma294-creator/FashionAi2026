@@ -5,84 +5,85 @@ def test_chat_endpoint_exists(client):
     """Test that the chat endpoint is reachable."""
     response = client.post('/api/ai-chat', json={
         'message': 'Hello',
-        'gender': 'female'
+        'gender': 'female',
+        'style_preference': 'Minimalist',
+        'body_type': 'Pear'
     })
     assert response.status_code == 200
     data = json.loads(response.data)
     assert 'reply' in data
 
-def test_fallback_wedding_female(client):
-    """Test wedding advice for females (fallback)."""
+def test_body_type_fit_advice(client):
+    """Verify that specific body types receive appropriate fit advice."""
+    # Test Pear shape
     response = client.post('/api/ai-chat', json={
-        'message': 'I need a wedding outfit',
-        'gender': 'female'
+        'message': 'What should I wear?',
+        'gender': 'female',
+        'body_type': 'Pear'
     })
     data = json.loads(response.data)
-    reply = data['reply'].lower()
-    
-    # Check for key terms from the new fallback logic
-    assert "lehenga" in reply or "saree" in reply
-    assert "pastel" in reply or "jewel" in reply
+    assert "Pear" in data['reply']
+    # Check for keywords from fit advice logic
+    assert "volume" in data['reply'].lower() or "hips" in data['reply'].lower()
 
-def test_fallback_wedding_male(client):
-    """Test wedding advice for males (fallback)."""
+    # Test Apple shape
     response = client.post('/api/ai-chat', json={
-        'message': 'I need a wedding outfit',
-        'gender': 'male'
+        'message': 'Style tips for me',
+        'gender': 'female',
+        'body_type': 'Apple'
     })
     data = json.loads(response.data)
-    reply = data['reply'].lower()
-    
-    # Check for key terms from the new fallback logic
-    assert "sherwani" in reply or "tuxedo" in reply
-    assert "cream" in reply or "navy" in reply
+    assert "Apple" in data['reply']
+    assert "v-neck" in data['reply'].lower() or "torso" in data['reply'].lower()
 
-def test_fallback_office(client):
-    """Test office advice (fallback)."""
+def test_occasion_party_detailed(client):
+    """Verify party recommendations are accurate and structured."""
     response = client.post('/api/ai-chat', json={
-        'message': 'What should I wear to the office?',
-        'gender': 'female'
+        'message': 'Suggest a party look',
+        'gender': 'male',
+        'occasion': 'party',
+        'body_type': 'Trapezoid'
     })
     data = json.loads(response.data)
     reply = data['reply'].lower()
-    
-    # Check for key terms
-    assert "blazer" in reply
-    assert "structured" in reply
+    assert "party" in reply
+    assert "black slim fit shirt" in reply or "chelsea boots" in reply
+    assert "fit advice" in reply
 
-def test_fallback_casual(client):
-    """Test casual advice (fallback)."""
+def test_comprehensive_color_guide(client):
+    """Test comprehensive color recommendations."""
     response = client.post('/api/ai-chat', json={
-        'message': 'Casual weekend outfit',
-        'gender': 'male'
+        'message': 'which colors suit me?',
+        'gender': 'female',
+        'skin_tone': 'Fair'
     })
     data = json.loads(response.data)
-    reply = data['reply'].lower()
-    
-    # Check for key terms
-    assert "denims" in reply
-    assert "sneakers" in reply
+    assert "Best Colors" in data['reply'] or "Color Guide" in data['reply']
+    assert "Fair" in data['reply']
 
-def test_hinglish_wedding(client):
-    """Test Hinglish query handling."""
+def test_weather_and_fabric(client):
+    """Test weather-based fabric suggestions."""
+    # Cold weather
     response = client.post('/api/ai-chat', json={
-        'message': 'Bhai ki shadi hai',
-        'gender': 'male'
+        'message': 'Casual look',
+        'weather': 'cold'
     })
     data = json.loads(response.data)
-    reply = data['reply'].lower()
-    
-    # Should trigger wedding logic
-    assert "sherwani" in reply or "tuxedo" in reply
+    assert "Wool" in data['reply'] or "Fleece" in data['reply']
 
-def test_general_fallback(client):
-    """Test general query that doesn't match specific keywords."""
-    response = client.post('/api/ai-chat', json={
-        'message': 'Something random regarding space travel',
-        'gender': 'female'
-    })
+def test_error_handling_empty_message(client):
+    """Test how the system handles empty input."""
+    response = client.post('/api/ai-chat', json={'message': ''})
     data = json.loads(response.data)
-    reply = data['reply'].lower()
-    
-    # Should trigger general advice
-    assert "fit is king" in reply
+    assert "help" in data['reply'].lower() or "today" in data['reply'].lower()
+
+def test_fallback_mechanism(client):
+    """Ensure the fallback system triggers when needed."""
+    from routes.chat import professional_fallback_chat
+    with client.application.test_request_context():
+        response = professional_fallback_chat("hello", "male", body_type="Rectangle")
+        data = response.get_json()
+        # Actual format has stars for bolding: ✨ **Outfit Recommendation**
+        assert "Outfit Recommendation" in data['reply']
+        assert "engine" in data
+        assert data['engine'] == "fallback"

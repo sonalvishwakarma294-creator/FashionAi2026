@@ -75,13 +75,13 @@ const Home = () => {
       desc: 'Event styling.'
     },
     {
-      id: 'home',
-      title: 'Home',
-      icon: FiHome,
-      path: '/',
+      id: 'dashboard',
+      title: 'Dashboard',
+      icon: FiActivity,
+      path: '/dashboard',
       color: 'from-gray-700 to-gray-900',
       size: 'sm',
-      desc: 'Main dashboard.'
+      desc: 'User analytics.'
     }
   ];
 
@@ -208,8 +208,8 @@ const Home = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {trendingOutfits.map((outfit) => (
               <Link key={outfit.id} to="/gallery" className="group">
-                <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden mb-4 shadow-xl">
-                  <img src={outfit.image} alt={outfit.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden mb-4 shadow-xl bg-white dark:bg-gray-800">
+                  <img src={outfit.image} alt={outfit.name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex items-end">
                     <div className="text-white">
                       <p className="text-[10px] font-black uppercase tracking-widest mb-1">{outfit.name}</p>

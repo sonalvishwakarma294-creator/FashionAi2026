@@ -1,44 +1,54 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-// import { MemoryRouter } from 'react-router-dom';
 import ColorMatch from './ColorMatch';
-import axios from 'axios';
+import { accessoryService } from '../services/api';
 
-// axios is already mocked in vitest.setup.js
-// We just need a reference to the mocked default export
-const mockedAxios = vi.mocked(axios, true);
+// Mock the API service
+vi.mock('../services/api', () => ({
+  default: {
+    post: vi.fn(),
+    get: vi.fn(),
+    interceptors: {
+      request: { use: vi.fn() },
+      response: { use: vi.fn() }
+    }
+  },
+  accessoryService: {
+    getColorCombinations: vi.fn()
+  }
+}));
 
 const mockColorResult = {
-  complementary: ['Gold', 'White'],
-  analogous: ['Royal Blue', 'Emerald'],
-  triadic: ['Coral', 'Teal'],
-  neutral: ['Ivory', 'Silver']
+  data: {
+    complementary: ['Gold', 'White'],
+    analogous: ['Royal Blue', 'Emerald'],
+    triadic: ['Coral', 'Teal'],
+    neutral: ['Ivory', 'Silver']
+  }
 };
 
 describe('ColorMatch Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockedAxios.post.mockResolvedValue({ data: mockColorResult });
+    accessoryService.getColorCombinations.mockResolvedValue(mockColorResult);
   });
 
-  it('renders color selector buttons', () => {
+  it('renders base UI elements', () => {
     render(<ColorMatch />);
 
-    expect(screen.getByTitle('Navy Blue')).toBeInTheDocument();
-    expect(screen.getByTitle('Black')).toBeInTheDocument();
+    expect(screen.getByText('Pick Your Base Color')).toBeInTheDocument();
     expect(screen.getByText('Generate Palettes')).toBeInTheDocument();
   });
 
-  it('selects color on button click', async () => {
+  it('selects color from presets', async () => {
     render(<ColorMatch />);
 
-    const navyButton = screen.getByTitle('Navy Blue');
+    // Presets are buttons with titles
     const goldButton = screen.getByTitle('Gold');
-
     fireEvent.click(goldButton);
 
-    // Selected color is now #FFD700 (Gold)
-    expect(goldButton).toBeInTheDocument();
+    // After clicking gold, the hex code should update in the UI
+    expect(screen.getByText('#FFD700')).toBeInTheDocument();
   });
 
   it('calls API on generate click', async () => {
@@ -48,11 +58,7 @@ describe('ColorMatch Component', () => {
     fireEvent.click(generateButton);
 
     await waitFor(() => {
-      // The mock instance doesn't actually prepend the baseURL in this simple mock
-      expect(mockedAxios.post).toHaveBeenCalledWith(
-        expect.stringContaining('/color-combinations'),
-        expect.objectContaining({ color: '#001F3F' })
-      );
+      expect(accessoryService.getColorCombinations).toHaveBeenCalled();
     });
   });
 
@@ -62,8 +68,7 @@ describe('ColorMatch Component', () => {
     const generateButton = screen.getByText('Generate Palettes');
     fireEvent.click(generateButton);
 
-    // ColorMatch.jsx uses 'Analyzing...'
-    expect(screen.getByText(/Analyzing/i)).toBeInTheDocument();
+    expect(screen.getByText('Analyzing...')).toBeInTheDocument();
   });
 
   it('shows results after API success', async () => {
@@ -73,14 +78,16 @@ describe('ColorMatch Component', () => {
     fireEvent.click(generateButton);
 
     await waitFor(() => {
-      // Use getAllByText because 'Gold' might appear in the result cards too
-      expect(screen.getAllByText(/Gold/i)[0]).toBeInTheDocument();
-      expect(screen.getByText(/Complementary/i)).toBeInTheDocument();
+      // Results are shown in lowercase/uppercase based on CSS, but text is there
+      // Use getAllByText because 'Gold' might appear in palette AND recommendation card
+      const goldElements = screen.getAllByText('Gold', { exact: false });
+      expect(goldElements.length).toBeGreaterThanOrEqual(1);
+      expect(screen.getByText('complementary', { exact: false })).toBeInTheDocument();
     });
   });
 
   it('handles API error gracefully', async () => {
-    mockedAxios.post.mockRejectedValue(new Error('API Error'));
+    accessoryService.getColorCombinations.mockRejectedValue(new Error('API Error'));
 
     render(<ColorMatch />);
 
@@ -88,7 +95,8 @@ describe('ColorMatch Component', () => {
     fireEvent.click(generateButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Generate Palettes')).toBeInTheDocument();
+      // It should still show some fallback results or at least not crash
+      expect(screen.getByText('Stylist\'s Recommendation')).toBeInTheDocument();
     });
   });
 });

@@ -12,7 +12,7 @@ def test_analyze_accessory_valid_image(client):
     """Test that the endpoint returns 200 and valid data for a real image."""
     # Path to the test image in the project root
     # backend/tests/../../test_accessory.jpg
-    image_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../test_accessory.jpg'))
+    image_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../images/black shirt.jpg'))
     
     # Ensure the file exists
     if not os.path.exists(image_path):
@@ -44,7 +44,7 @@ def test_analyze_accessory_manual_color(client):
     # We can send a dummy image or reuse the real one, but we must send an image
     # because the endpoint checks `if 'image' not in request.files` first.
     
-    image_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../test_accessory.jpg'))
+    image_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../images/black shirt.jpg'))
     if not os.path.exists(image_path):
         pytest.skip("Test image not found")
 

@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 // Auth
-import { AuthProvider } from './contexts/AuthContext';
 
 // Components
 import Navbar from './components/Navbar';
@@ -62,47 +61,41 @@ function App() {
   };
 
   return (
-    <AuthProvider>
-      <div className="min-h-screen bg-background dark:bg-darkBackground text-text dark:text-darkText transition-colors duration-300">
-        <Navbar scrolled={scrolled} darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-        <AnimatePresence mode="wait">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/recommendations" element={<Recommendations />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/skintone" element={<SkinTone />} />
-            <Route path="/skin-tone" element={<SkinTone />} />
-            <Route path="/body-type" element={<BodyType />} />
-            <Route path="/occasion" element={<Occasion />} />
-            <Route path="/image-upload" element={<ImageUpload />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/outfit/:id" element={<OutfitDetail />} />
-            <Route path="/accessory-match" element={<AccessoryMatch />} />
-            <Route path="/color-match" element={<ColorMatch />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/careers" element={<Careers />} />
-            <Route path="/press" element={<Press />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/feedback" element={<Feedback />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/cookies" element={<Cookies />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-        </AnimatePresence>
-        <Footer />
-        <Chatbot />
-        <ScrollToTop />
-
-
-      </div>
-    </AuthProvider>
-
-
+    <div className="min-h-screen bg-background dark:bg-darkBackground text-text dark:text-darkText transition-colors duration-300">
+      <Navbar scrolled={scrolled} darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+      <AnimatePresence mode="wait">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/recommendations" element={<Recommendations />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/skintone" element={<SkinTone />} />
+          <Route path="/skin-tone" element={<SkinTone />} />
+          <Route path="/body-type" element={<BodyType />} />
+          <Route path="/occasion" element={<Occasion />} />
+          <Route path="/image-upload" element={<ImageUpload />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/outfit/:id" element={<OutfitDetail />} />
+          <Route path="/accessory-match" element={<AccessoryMatch />} />
+          <Route path="/color-match" element={<ColorMatch />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/press" element={<Press />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/cookies" element={<Cookies />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </AnimatePresence>
+      <Footer />
+      <Chatbot />
+      <ScrollToTop />
+    </div>
   );
 }
 

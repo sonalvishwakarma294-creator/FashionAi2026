@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiSearch, FiCopy, FiShare2, FiStar, FiTrendingUp, FiCheck, FiInfo, FiArrowRight } from 'react-icons/fi';
 import { IoColorPaletteOutline } from 'react-icons/io5';
 import { accessoryService } from '../services/api';
+import { getColorHex } from '../utils/colorUtils';
 
 const ColorMatch = () => {
   const [selectedColor, setSelectedColor] = useState('#001F3F');
@@ -24,18 +25,6 @@ const ColorMatch = () => {
     { name: 'Mustard', hex: '#FFDB58' },
     { name: 'Charcoal', hex: '#36454F' }
   ];
-
-  const getColorHex = (colorName) => {
-    const colors = {
-      'navy blue': '#001F3F', 'black': '#000000', 'white': '#FFFFFF', 'burgundy': '#800020',
-      'emerald': '#50C878', 'gold': '#FFD700', 'royal blue': '#4169E1', 'coral': '#FF7F50',
-      'teal': '#008080', 'mustard': '#FFDB58', 'olive': '#808000', 'terracotta': '#E2725B',
-      'ivory': '#FFFFF0', 'silver': '#C0C0C0', 'ruby red': '#E0115F', 'forest green': '#228B22',
-      'champagne': '#F7E7CE', 'rose gold': '#B76E79', 'plum': '#8E4585', 'charcoal': '#36454F',
-      'grey': '#808080', 'orange': '#FFA500', 'tan': '#D2B48C', 'beige': '#F5F5DC'
-    };
-    return colors[colorName.toLowerCase()] || colorName;
-  };
 
   const analyzeColor = async (colorToUse = selectedColor) => {
     setLoading(true);

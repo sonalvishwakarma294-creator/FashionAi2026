@@ -1,10 +1,8 @@
 import os
 from datetime import timedelta
 from dotenv import load_dotenv
-
-# Load environment variables from the same directory as this file
-env_path = os.path.join(os.path.dirname(__file__), '.env')
-load_dotenv(env_path)
+# Load environment variables first!
+load_dotenv()
 
 from flask import Flask, send_from_directory, jsonify, request
 from flask_cors import CORS
@@ -17,8 +15,6 @@ from routes.accessory import accessory_bp
 from routes.recommendations import recommendations_bp
 from routes.chat import chat_bp
 from routes.user_dashboard import user_dashboard_bp
-from routes.feedback import feedback_bp
-from routes.admin import admin_bp
 
 app = Flask(__name__)
 # Robust CORS configuration for development
@@ -78,8 +74,6 @@ app.register_blueprint(accessory_bp)
 app.register_blueprint(recommendations_bp)
 app.register_blueprint(chat_bp)
 app.register_blueprint(user_dashboard_bp)
-app.register_blueprint(feedback_bp)
-app.register_blueprint(admin_bp)
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5001))
