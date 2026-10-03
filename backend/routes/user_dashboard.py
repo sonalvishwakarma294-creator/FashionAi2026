@@ -8,13 +8,13 @@ from config.db import db
 import os
 import json
 
-user_dashboard_bp = Blueprint('user_dashboard', __name__, url_prefix='/api/user')
+user_dashboard_bp = Blueprint('user_dashboard', __name__, url_prefix='/api')
 
 BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SAVED_RECS_FILE = os.path.join(BACKEND_DIR, 'saved_recommendations.json')
 LIKES_FILE = os.path.join(BACKEND_DIR, 'likes.json')
 
-@user_dashboard_bp.route('/dashboard-stats', methods=['GET'])
+@user_dashboard_bp.route('/user/dashboard-stats', methods=['GET'])
 @jwt_required()
 def get_dashboard_stats():
     user_email = get_jwt_identity()
@@ -74,27 +74,18 @@ def get_dashboard_stats():
         except:
             pass
 
-    # 2. Fetch Liked Outfits
-    # From DB
+# 2. Fetch Liked Outfits from DB only (primary source)
     try:
         if user_id > 0:
             likes = db.session.query(Outfit).join(Like).filter(Like.user_id == user_id).all()
             liked_outfits = [o.to_dict() for o in likes]
-    except:
-        pass
-        
-    # From JSON (Merge)
-    if os.path.exists(LIKES_FILE):
-        try:
-            with open(LIKES_FILE, 'r') as f:
-                all_likes = json.load(f)
-                json_user_likes = all_likes.get(user_email, [])
-                existing_ids = {o.get('id') for o in liked_outfits}
-                for l in json_user_likes:
-                    if l.get('id') not in existing_ids:
-                        liked_outfits.append(l)
-        except:
-            pass
+            print(f"✅ Dashboard: Found {len(liked_outfits)} liked outfits in DB for user_id {user_id}")
+        else:
+            print(f"⚠️ No DB user_id for {user_email}, liked_outfits empty")
+    except Exception as e:
+        print(f"❌ DB likes query failed: {e}")
+        liked_outfits = []
+
     
     # Sort reports by date (Newest first)
     try:
@@ -129,7 +120,7 @@ def get_dashboard_stats():
         'liked_outfits': liked_outfits
     })
 
-@user_dashboard_bp.route('/profile', methods=['PUT'])
+@user_dashboard_bp.route('/user/profile', methods=['PUT'])
 @jwt_required()
 def update_profile():
     user_email = get_jwt_identity()

@@ -35,6 +35,7 @@ import Terms from './pages/Terms';
 import Cookies from './pages/Cookies';
 import Help from './pages/Help';
 import Contact from './pages/Contact';
+import DigitalCloset from './pages/DigitalCloset';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -78,6 +79,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/outfit/:id" element={<OutfitDetail />} />
+          <Route path="/closet" element={<DigitalCloset />} />
           <Route path="/accessory-match" element={<AccessoryMatch />} />
           <Route path="/color-match" element={<ColorMatch />} />
           <Route path="/about" element={<About />} />

@@ -1,31 +1,23 @@
-# Chatbot Enhancement TODO
-Status: [IN PROGRESS]
+# Fix Image Proxy ECONNREFUSED Error
 
-## Approved Plan Steps:
-- [✅] Step 1: Update backend/routes/chat.py (enhanced prompts + smart logic) **✅ COMPLETE**
-- [✅] Step 2: Update src/components/Chatbot.jsx (UI quick buttons + image upload) **✅ COMPLETE**
-- [ ] Step 3: Update backend/tests/test_chat.py (new test cases)
+## Steps to Complete:
 
-- [ ] Step 4: Test backend endpoints
-- [ ] Step 5: Test frontend integration
-- [ ] Step 6: Performance validation & completion
+### 1. ✅ Analyzed the issue:
+   - Vite proxy was forwarding `/images/*` requests to Flask backend at `127.0.0.1:5001`
+   - When backend is not running → ECONNREFUSED errors for every image
+   - Images affected: `/images/summer_dress.jpg`, `/images/classic_denim.jpg`, `/images/img.jpg`, etc.
 
-✅ **ALL STEPS COMPLETE!**
+### 2. ✅ Fixed `vite.config.js`:
+   - Removed `/images` proxy target (was pointing to backend)
+   - Added custom Vite middleware (`serve-images`) that serves files directly from `d:/fashion pro/images/`
+   - Handles MIME types for jpg, jpeg, png, gif, webp, svg
+   - Added path traversal security check
+   - `/api` proxy kept intact for backend API calls
 
-## Summary of Changes:
-- ✅ `backend/routes/chat.py`: Enhanced prompts + smart features (outfits+weather, skin tones, image analysis)
-- ✅ `src/components/Chatbot.jsx`: New quick buttons + image upload UI 
-- ✅ `backend/tests/test_chat.py`: 10+ test cases for new features
+### 3. ✅ Test: Verified images load correctly (HTTP 200 with image data):
+   - `/images/summer_dress.jpg` → 200 OK (161KB)
+   - Vite now serves images directly from the `images/` folder
+   - Backend API proxy retained for `/api` routes
+   - Both Vite dev server and Flask backend confirmed running
 
-## Test Commands:
-```bash
-# Backend tests
-cd backend && pytest tests/test_chat.py -v
 
-# Frontend dev
-npm run dev
-```
-
-Chatbot now has natural responses, smart outfit suggestions (occasion+weather), 15-20 color recs by skin tone, image analysis → accessories, optimized UI w/ typing animation & quick replies.
-
-**Restart your Flask server** to test! 🎉

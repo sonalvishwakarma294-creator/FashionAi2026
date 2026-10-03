@@ -67,7 +67,7 @@ export const accessoryService = {
     headers: { 'Content-Type': 'multipart/form-data' },
   }),
   colorMatch: (color) => api.post('/color-match', { color }),
-  getColorCombinations: (color) => api.post('/color-combinations', { color }),
+  getColorCombinations: (color, gender = 'female', skinTone = 'Medium') => api.post('/color-combinations', { color, gender, skin_tone: skinTone }),
   analyzeSkinTone: (formData) => api.post('/skin-tone/analyze', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   }),
@@ -77,6 +77,7 @@ export const galleryService = {
   getOutfits: (page = 1, limit = 20) => api.get(`/gallery?page=${page}&limit=${limit}`),
   getOutfitDetail: (id) => api.get(`/gallery/${id}`),
   likeOutfit: (outfitId) => api.post('/gallery/like', { id: outfitId }),
+  getLikedOutfits: () => api.get('/profile/liked'),
 };
 
 export const recommendationService = {
@@ -96,6 +97,22 @@ export const adminService = {
   getStats: () => api.get('/admin/stats'),
   getUsers: () => api.get('/admin/users'),
   getFeedback: () => api.get('/admin/feedback'),
+};
+
+export const closetService = {
+  getItems: (params = {}) => api.get('/closet/items', { params }),
+  addItem: (formData) => api.post('/closet/items', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }),
+  deleteItem: (id) => api.delete(`/closet/items/${id}`),
+  generateCapsules: (data = {}) => api.post('/closet/capsule-generate', data),
+};
+
+export const searchService = {
+  visualSearch: (formData) => api.post('/search/visual', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }),
+  semanticSearch: (q) => api.get('/search/semantic', { params: { q } }),
 };
 
 export default api;

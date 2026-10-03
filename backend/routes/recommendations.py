@@ -7,7 +7,7 @@ import json
 import os
 import random
 
-recommendations_bp = Blueprint('recommendations', __name__, url_prefix='/api/recommendations')
+recommendations_bp = Blueprint('recommendations', __name__, url_prefix='/api')
 
 BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SAVED_RECS_FILE = os.path.join(BACKEND_DIR, 'saved_recommendations.json')
@@ -165,7 +165,7 @@ def get_expert_styling_logic(gender, occasion, body_type):
             {"title": "The Modern Minimalist", "look": "Monochrome Basics", "advice": "Keep it simple. Good shoes and a watch elevate any outfit."}
         ]
 
-@recommendations_bp.route('', methods=['POST'])
+@recommendations_bp.route('/recommendations', methods=['POST'])
 def recommend():
     d = request.json
     gender = d.get('gender', 'female').lower()
@@ -222,7 +222,7 @@ def save_rec_to_json(user_email, rec_data):
         return True
     except: return False
 
-@recommendations_bp.route('/save', methods=['POST'])
+@recommendations_bp.route('/recommendations/save', methods=['POST'])
 @jwt_required()
 def save_rec():
     user_email = get_jwt_identity()

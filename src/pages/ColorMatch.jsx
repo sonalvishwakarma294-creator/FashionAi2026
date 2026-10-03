@@ -30,8 +30,13 @@ const ColorMatch = () => {
     setLoading(true);
     setResult(null);
     try {
+      // Get user data from localStorage
+      const userData = JSON.parse(localStorage.getItem('fashionUser') || '{}');
+      const gender = userData.gender || 'female';
+      const skinTone = userData.skin_tone || 'Medium'; // Default to Medium if not set
+      
       // If it's a hex from picker, we send the hex
-      const res = await accessoryService.getColorCombinations(colorToUse);
+      const res = await accessoryService.getColorCombinations(colorToUse, gender, skinTone);
       setResult(res.data);
       
       // Update color name if it was a preset

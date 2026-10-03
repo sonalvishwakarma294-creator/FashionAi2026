@@ -25,15 +25,15 @@ def init_db(app):
         if use_sqlite:
             db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'fashion.db')
             app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
-            print(f"📦 Using local SQLite database at: {db_path}")
+            print(f"[DB] Using local SQLite database at: {db_path}")
         else:
             app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_user}:{db_pass}@{db_host}/{db_name}'
-            print(f"🗄️ Attempting MySQL connection to {db_host}")
+            print(f"[DB] Attempting MySQL connection to {db_host}")
             
     except Exception as e:
         db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'fashion.db')
         app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
-        print(f"⚠️ Database config error, falling back to SQLite: {e}")
+        print(f"[DB] Database config error, falling back to SQLite: {e}")
     
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
@@ -41,6 +41,6 @@ def init_db(app):
     with app.app_context():
         try:
             db.create_all()
-            print("✅ Database tables initialized.")
+            print("[DB] Database tables initialized.")
         except Exception as e:
-            print(f"❌ Could not create tables: {e}")
+            print(f"[DB] Could not create tables: {e}")
