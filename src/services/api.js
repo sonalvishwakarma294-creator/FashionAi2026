@@ -120,10 +120,6 @@ export const recommendationService = {
   saveRecommendation: (data) => api.post('/recommendations/save', data),
 };
 
-export const chatService = {
-  sendMessage: (message, gender, history, language = 'en', stylePreference = 'Casual', skinTone = null, occasion = null, weather = null) => api.post('/ai-chat', { message, gender, history, language, style_preference: stylePreference, skin_tone: skinTone, occasion, weather }),
-};
-
 export const feedbackService = {
   submit: (data) => api.post('/feedback', data),
 };

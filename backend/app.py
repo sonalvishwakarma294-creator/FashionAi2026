@@ -17,7 +17,6 @@ from routes.auth import auth_bp
 from routes.gallery import gallery_bp
 from routes.accessory import accessory_bp
 from routes.recommendations import recommendations_bp
-from routes.chat import chat_bp
 from routes.user_dashboard import user_dashboard_bp
 from routes.admin import admin_bp
 from routes.feedback import feedback_bp
@@ -167,7 +166,6 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(gallery_bp)
 app.register_blueprint(accessory_bp)
 app.register_blueprint(recommendations_bp)
-app.register_blueprint(chat_bp)
 app.register_blueprint(user_dashboard_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(feedback_bp)

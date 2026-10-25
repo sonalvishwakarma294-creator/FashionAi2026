@@ -549,10 +549,10 @@ const Footer = () => {
 
       </div>
 
-      {/* Floating Back to Top FAB Button (Offset so it doesn't overlap Chatbot FAB) */}
+      {/* Floating Back to Top FAB Button */}
       <motion.button
         onClick={scrollToTop}
-        className="fixed bottom-5 right-20 sm:bottom-6 sm:right-24 w-11 h-11 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-r from-primary to-secondary text-white shadow-2xl border border-white/20 flex items-center justify-center z-40 transition-all hover:scale-110 active:scale-95 group"
+        className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 w-11 h-11 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-r from-primary to-secondary text-white shadow-2xl border border-white/20 flex items-center justify-center z-40 transition-all hover:scale-110 active:scale-95 group"
         whileHover={{ y: -3 }}
         whileTap={{ scale: 0.95 }}
         aria-label="Scroll to top"

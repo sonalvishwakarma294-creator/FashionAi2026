@@ -8,7 +8,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 // Components
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Chatbot from './components/Chatbot';
 import ScrollToTop from './components/ScrollToTop';
 
 // Pages
@@ -100,7 +99,6 @@ function App() {
         </Routes>
       </AnimatePresence>
       <Footer />
-      <Chatbot />
       <ScrollToTop />
     </div>
   );
