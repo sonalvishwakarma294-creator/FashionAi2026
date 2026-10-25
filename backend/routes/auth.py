@@ -336,8 +336,16 @@ def forgot_password():
         reset_url = f"{base_url}/reset-password?token={token}"
         ok, mode, err = send_password_reset_email(user.email, user.name, reset_url)
         if not ok:
-            logger.error("forgot_password() – SMTP failed for email=%s: %s", user.email, err)
-            db.session.rollback()
+            logger.error("forgot_password() – SMTP delivery failed for email=%s: %s", user.email, err)
+            user.reset_token = None
+            user.reset_token_expires_at = None
+            try:
+                db.session.commit()
+            except Exception:
+                db.session.rollback()
+            return jsonify({
+                'error': f'Failed to send password reset email ({err or "SMTP Error"}). Please verify SMTP settings.'
+            }), 500
 
         payload = {
             'message': _GENERIC_OK,

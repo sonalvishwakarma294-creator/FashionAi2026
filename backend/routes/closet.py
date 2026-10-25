@@ -306,8 +306,8 @@ def add_item():
             fout.write(file_bytes)
 
         saved_file_path = os.path.abspath(file_path)
-        image_url = _to_posix(f"/images/closet/{filename}")
 
+        # Always extract colors first while we have the local file
         if not color_name or not color_hex:
             try:
                 detected_name, detected_hex, _, _swatches = extract_full_palette(saved_file_path, k=5)
@@ -315,6 +315,41 @@ def add_item():
                 color_hex = detected_hex or color_hex or "#4A5568"
             except Exception:
                 logger.warning("Auto colour extract failed for %s", saved_file_path)
+
+        use_cloudinary = os.environ.get('USE_CLOUDINARY', 'False').lower() in ('1', 'true', 'yes')
+        
+        if use_cloudinary:
+            cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME')
+            if not cloud_name:
+                logger.error("USE_CLOUDINARY is True but CLOUDINARY_CLOUD_NAME is not configured.")
+                try:
+                    os.remove(saved_file_path)
+                except Exception:
+                    pass
+                return jsonify({'error': 'Cloud storage is enabled but CLOUDINARY credentials are missing in server environment.'}), 500
+
+            try:
+                import cloudinary.uploader
+                upload_result = cloudinary.uploader.upload(
+                    saved_file_path,
+                    folder="fashion_pro_closet",
+                    resource_type="image"
+                )
+                image_url = upload_result.get("secure_url")
+                # Remove temporary local file after successful upload
+                try:
+                    os.remove(saved_file_path)
+                except Exception:
+                    pass
+            except Exception as e:
+                logger.error("Cloudinary upload failed: %s", e)
+                try:
+                    os.remove(saved_file_path)
+                except Exception:
+                    pass
+                return jsonify({'error': f'Image upload to cloud failed: {str(e)}'}), 500
+        else:
+            image_url = _to_posix(f"/images/closet/{filename}")
 
     # ------------------------------------------------------------------
     # Branch B: JSON body with optional image_url reference
@@ -504,8 +539,17 @@ def delete_item(item_id):
             if os.path.abspath(fpath).startswith(os.path.abspath(CLOSET_UPLOAD_DIR)):
                 if os.path.isfile(fpath):
                     os.remove(fpath)
-    except Exception:
-        logger.warning("Could not remove image for closet item %d", item_id)
+        elif item.image_url and 'res.cloudinary.com' in item.image_url:
+            import cloudinary.uploader
+            parts = item.image_url.split('/upload/')
+            if len(parts) > 1:
+                path_parts = parts[1].split('/')
+                if path_parts[0].startswith('v') and path_parts[0][1:].isdigit():
+                    path_parts = path_parts[1:]
+                public_id = '/'.join(path_parts).rsplit('.', 1)[0]
+                cloudinary.uploader.destroy(public_id)
+    except Exception as e:
+        logger.warning("Could not remove image for closet item %d: %s", item_id, e)
 
     db.session.delete(item)
     try:

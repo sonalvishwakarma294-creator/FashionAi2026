@@ -3,7 +3,10 @@ import json
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from openai import OpenAI
-import google.generativeai as genai
+try:
+    import google.genai as genai
+except ImportError:
+    genai = None
 from dotenv import load_dotenv
 
 from config.db import db
@@ -32,15 +35,14 @@ def get_groq_client():
         print(f"DEBUG: Groq client init failed: {e}")
         return None
 
-def get_gemini_model():
+def get_gemini_client():
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         return None
     try:
-        genai.configure(api_key=api_key)
-        return genai.GenerativeModel('gemini-1.5-flash')
+        return genai.Client(api_key=api_key)
     except Exception as e:
-        print(f"DEBUG: Gemini init failed: {e}")
+        print(f"DEBUG: Gemini client init failed: {e}")
         return None
 
 def get_openai_client():
@@ -289,8 +291,8 @@ def ai_chat():
                 print(f"DEBUG: Groq model {g_model} failed: {e}")
 
     # Tier 2: Try Gemini API
-    gemini_model = get_gemini_model()
-    if gemini_model:
+    gemini_client = get_gemini_client()
+    if gemini_client:
         try:
             # Combine system prompt with user history for Gemini
             conversation_history = [f"System Instructions:\n{full_system_prompt}\n"]
@@ -298,7 +300,10 @@ def ai_chat():
                 prefix = "User: " if m['role'] == 'user' else "Stylist: "
                 conversation_history.append(f"{prefix}{m['content']}")
             gemini_prompt = "\n".join(conversation_history)
-            gem_resp = gemini_model.generate_content(gemini_prompt)
+            gem_resp = gemini_client.models.generate_content(
+                model='gemini-2.0-flash',
+                contents=gemini_prompt
+            )
             if gem_resp and gem_resp.text:
                 return jsonify({'reply': gem_resp.text, 'engine': 'gemini'})
         except Exception as e:

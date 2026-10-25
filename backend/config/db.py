@@ -72,8 +72,17 @@ def init_db(app):
         app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
         print(f"[DB] Using SQLite at: {db_path}")
     else:
-        uri = build_mysql_uri()
-        print(f"[DB] Configuring MySQL -> host={os.getenv('DB_HOST')} db={os.getenv('DB_NAME')}")
+        db_url = os.getenv('DATABASE_URL') or os.getenv('MYSQL_URL')
+        if db_url:
+            if db_url.startswith('mysql://'):
+                db_url = db_url.replace('mysql://', 'mysql+pymysql://', 1)
+            elif db_url.startswith('postgres://'):
+                db_url = db_url.replace('postgres://', 'postgresql://', 1)
+            app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+            print(f"[DB] Using DATABASE_URL / MYSQL_URL connection string.")
+        else:
+            uri = build_mysql_uri()
+            print(f"[DB] Configuring MySQL -> host={os.getenv('DB_HOST')} db={os.getenv('DB_NAME')}")
 
         ok, msg = test_mysql_connection()
         if ok:

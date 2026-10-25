@@ -99,6 +99,21 @@ def expired_token_response(jwt_header, jwt_payload):
     return jsonify({'error': 'Session expired. Please log in again.'}), 401
 
 # ---------------------------------------------------------------------------
+# Cloudinary Setup (Optional - for serverless deployments)
+# ---------------------------------------------------------------------------
+if os.getenv('USE_CLOUDINARY', 'False').lower() in ('1', 'true', 'yes'):
+    import cloudinary
+    import cloudinary.uploader
+    import cloudinary.api
+    cloudinary.config(
+        cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'),
+        api_key = os.getenv('CLOUDINARY_API_KEY'),
+        api_secret = os.getenv('CLOUDINARY_API_SECRET'),
+        secure = True
+    )
+    logger.info("Cloudinary integration enabled for image uploads.")
+
+# ---------------------------------------------------------------------------
 # Database Setup
 # ---------------------------------------------------------------------------
 init_db(app)

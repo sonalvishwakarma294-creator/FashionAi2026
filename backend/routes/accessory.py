@@ -2,7 +2,10 @@ from flask import Blueprint, request, jsonify
 import cv2
 import numpy as np
 import os
-import google.generativeai as genai
+try:
+    import google.genai as genai
+except ImportError:
+    genai = None
 import json
 from PIL import Image
 import io
@@ -566,12 +569,11 @@ def _detect_skin_pixels(img_bgr):
 
     return best_mask, None
 
-def get_gemini_model():
+def get_gemini_client():
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key: return None
     try:
-        genai.configure(api_key=api_key)
-        return genai.GenerativeModel('gemini-pro-vision')
+        return genai.Client(api_key=api_key)
     except: return None
 
 def get_style_from_dataset(img):
@@ -646,13 +648,16 @@ def analyze_accessory():
                 print(f"Dataset Match Skip: {ds_err}")
 
         # 3. AI Multimodal Enhancement (if available)
-        model = get_gemini_model()
-        if model:
+        client = get_gemini_client()
+        if client:
             try:
                 file.seek(0)
                 img_pil = Image.open(io.BytesIO(file.read()))
                 prompt = "Analyze this garment photo. Return ONLY JSON: {\"color\": \"Name\", \"item_type\": \"Specific Type\", \"style\": \"Ethnic, Party, Formal, or Casual\"}."
-                response = model.generate_content([prompt, img_pil])
+                response = client.models.generate_content(
+                    model='gemini-2.0-flash',
+                    contents=[prompt, img_pil]
+                )
                 text = response.text.strip()
                 if "```json" in text: text = text.split("```json")[1].split("```")[0].strip()
                 elif "```" in text: text = text.split("```")[1].split("```")[0].strip()
