@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const API_BASE_URL = '/api';
+// In production: set VITE_API_BASE_URL=https://your-backend.onrender.com in your hosting platform
+// In development: leave unset — Vite proxy handles /api -> http://localhost:5001
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+  ? `${import.meta.env.VITE_API_BASE_URL}/api`
+  : '/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -47,6 +51,11 @@ api.interceptors.response.use(
 );
 
 const INFERRED_BACKEND_BASE = (() => {
+  // If VITE_API_BASE_URL is set (production), use that directly
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  // Development: infer from current window port
   const host = window.location.hostname || '127.0.0.1';
   const devPort = 5001;
   if (window.location.port === '5173') {
