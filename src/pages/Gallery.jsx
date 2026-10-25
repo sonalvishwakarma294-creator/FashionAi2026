@@ -6,7 +6,8 @@ import {
   FiRefreshCw, FiZap, FiAlertCircle, FiArrowRight, FiCheck, 
   FiCamera, FiUploadCloud, FiStar
 } from 'react-icons/fi';
-import api, { galleryService, searchService, BASE_URL } from '../services/api';
+import api, { galleryService, searchService } from '../services/api';
+import SmartImage from '../components/SmartImage';
 
 const Gallery = () => {
   const location = useLocation();
@@ -28,17 +29,11 @@ const Gallery = () => {
   const [visualPreview, setVisualPreview] = useState('');
   
   const [selectedFilters, setSelectedFilters] = useState({
-    occasion: [],
-    color: [],
-    style: [],
-    category: []
+    occasion: []
   });
 
   const filterOptions = {
-    occasion: ['Casual', 'Party', 'Office', 'Traditional'],
-    color: ['Red', 'Blue', 'Green', 'Black', 'White', 'Pink', 'Yellow', 'Purple'],
-    style: ['Authentic', 'Modern', 'Classic', 'Traditional'],
-    category: ['Full Look', 'Tops', 'Bottoms']
+    occasion: ['Casual', 'Party', 'Office', 'Traditional']
   };
 
   useEffect(() => {
@@ -97,6 +92,21 @@ const Gallery = () => {
     } catch (err) {
       setError("Failed to refresh index.");
       setLoading(false);
+    }
+  };
+
+  const [paletteIndexing, setPaletteIndexing] = useState(false);
+  const indexPalettes = async () => {
+    if (paletteIndexing) return;
+    setPaletteIndexing(true);
+    try {
+      const res = await searchService.indexPalettes();
+      alert(`Palette indexing complete: ${res.data.newly_indexed} newly indexed, ${res.data.already_indexed} already indexed, ${res.data.failed} failed.`);
+    } catch (err) {
+      console.error('Palette indexing failed:', err);
+      alert('Palette indexing could not complete. Check backend is running.');
+    } finally {
+      setPaletteIndexing(false);
     }
   };
 
@@ -189,7 +199,7 @@ const Gallery = () => {
         </motion.div>
 
         {/* Search and Action Bar */}
-        <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
+        <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
           <div className="relative w-full md:max-w-md">
             <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
             <input 
@@ -197,7 +207,7 @@ const Gallery = () => {
               placeholder="Search by keywords, vibes, occasions (e.g. 'office linen', 'summer pastel')..." 
               value={searchQuery} 
               onChange={(e) => setSearchQuery(e.target.value)} 
-              className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl focus:ring-2 focus:ring-primary/30 transition-all font-bold text-xs" 
+              className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl focus:ring-2 focus:ring-primary/30 transition-all font-bold text-xs" 
             />
             {searchQuery && (
               <button onClick={() => setSearchQuery('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
@@ -206,19 +216,20 @@ const Gallery = () => {
             )}
           </div>
 
-          <div className="flex gap-2 w-full md:w-auto">
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full md:w-auto">
             {/* Visual Search Button */}
             <button 
               onClick={() => setVisualSearchOpen(true)}
-              className="flex-1 md:flex-initial flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 sm:px-5 py-3 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all"
             >
-              <FiCamera className="w-4 h-4" /> Visual Search
+              <FiCamera className="w-4 h-4 shrink-0" /> 
+              <span>Visual Search</span>
             </button>
 
             {/* Filter Toggle */}
             <button 
               onClick={() => setFilterOpen(!filterOpen)} 
-              className={`px-6 py-3.5 rounded-2xl border font-bold uppercase text-xs tracking-wider transition-all flex items-center gap-1.5 ${
+              className={`flex-1 sm:flex-initial px-4 sm:px-6 py-3 rounded-2xl border font-bold uppercase text-xs tracking-wider transition-all flex items-center justify-center gap-1.5 ${
                 filterOpen 
                   ? 'bg-primary text-white border-primary shadow-md' 
                   : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800'
@@ -230,10 +241,20 @@ const Gallery = () => {
             {/* Refresh */}
             <button 
               onClick={refreshIndex} 
-              className="p-3.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-2xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+              className="p-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-2xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-all shrink-0"
               title="Refresh Gallery"
             >
               <FiRefreshCw className={loading ? 'animate-spin' : ''} />
+            </button>
+
+            {/* Index Palettes */}
+            <button 
+              onClick={indexPalettes} 
+              disabled={paletteIndexing}
+              className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-2xl hover:shadow-lg transition-all disabled:opacity-50 shrink-0"
+              title="Pre-index outfit color palettes for faster & more accurate visual search"
+            >
+              <FiZap className={paletteIndexing ? 'animate-spin' : ''} />
             </button>
           </div>
         </div>
@@ -242,19 +263,19 @@ const Gallery = () => {
         <AnimatePresence>
           {filterOpen && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden mt-4">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-6 bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-xl">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-xl">
                 {Object.entries(filterOptions).map(([cat, opts]) => (
                   <div key={cat}>
-                    <h3 className="text-[10px] font-black uppercase tracking-wider text-gray-400 mb-2">{cat}</h3>
-                    <div className="flex flex-wrap gap-1.5">
+                    <h3 className="text-[10px] font-black uppercase tracking-wider text-gray-400 mb-2">Occasion</h3>
+                    <div className="flex flex-wrap gap-2">
                       {opts.map(o => (
-                        <button 
-                          key={o} 
-                          onClick={() => toggleFilter(cat, o)} 
-                          className={`px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase transition-all ${
-                            selectedFilters[cat].includes(o) 
-                              ? 'bg-primary text-white shadow-sm' 
-                              : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200'
+                        <button
+                          key={o}
+                          onClick={() => toggleFilter(cat, o)}
+                          className={`px-4 py-2 rounded-xl text-[11px] font-bold uppercase transition-all ${
+                            selectedFilters[cat].includes(o)
+                              ? 'bg-primary text-white shadow-md ring-2 ring-primary/30'
+                              : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                           }`}
                         >
                           {o}
@@ -325,41 +346,82 @@ const Gallery = () => {
               {visualSearching ? (
                 <div className="py-12 text-center">
                   <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-                  <p className="text-xs font-bold uppercase tracking-wider">Scanning visual features & color histograms...</p>
+                  <p className="text-xs font-bold uppercase tracking-wider">Scanning visual features & palette histograms with CIEDE2000 matching...</p>
                 </div>
               ) : visualSearchResults?.results?.length > 0 ? (
                 <div>
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
                     <h4 className="text-xs font-black uppercase text-gray-500">
                       Top Visual Matches ({visualSearchResults.results.length})
                     </h4>
-                    <span className="text-[10px] px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold">
-                      Extracted Palette: {visualSearchResults.query_color}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      {visualSearchResults.palette_swatches && visualSearchResults.palette_swatches.length > 0 && (
+                        <div className="flex items-center gap-1" title="Query palette extracted from inspiration">
+                          {visualSearchResults.palette_swatches.map((sw, i) => (
+                            <div
+                              key={i}
+                              className="w-5 h-5 rounded-full border-2 border-white shadow-sm"
+                              style={{ backgroundColor: sw.hex || `rgb(${(sw.rgb || [128,128,128]).join(',')})` }}
+                              title={`${sw.name || 'Query color'} ${sw.percentage ? `(${sw.percentage}%)` : ''}`}
+                            />
+                          ))}
+                        </div>
+                      )}
+                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold">
+                        {visualSearchResults.query_color}
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-h-[380px] overflow-y-auto pr-1">
-                    {visualSearchResults.results.map((item) => (
-                      <Link 
-                        key={item.id} 
-                        to={`/outfit/${item.id}`}
-                        onClick={() => setVisualSearchOpen(false)}
-                        className="group bg-gray-50 dark:bg-gray-800 rounded-2xl p-2.5 border border-gray-100 dark:border-gray-700/60 hover:shadow-lg transition-all"
-                      >
-                        <div className="aspect-[3/4] w-full rounded-xl overflow-hidden relative mb-2">
-                          <img 
-                            src={`${BASE_URL}${item.image}`} 
-                            alt={item.title} 
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform" 
-                          />
-                          <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[9px] font-black bg-black/70 text-white backdrop-blur-md">
-                            {item.match_score}% Match
-                          </span>
-                        </div>
-                        <h5 className="text-xs font-bold truncate">{item.title}</h5>
-                        <p className="text-[10px] text-gray-500 truncate mt-0.5">{item.match_reason}</p>
-                      </Link>
-                    ))}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-h-[420px] overflow-y-auto pr-1">
+                    {visualSearchResults.results.map((item) => {
+                      const score = item.match_score || 0;
+                      const scoreColor = score >= 85
+                        ? 'from-emerald-500 to-green-500'
+                        : score >= 70
+                          ? 'from-sky-500 to-blue-500'
+                          : score >= 55
+                            ? 'from-amber-500 to-orange-500'
+                            : 'from-gray-400 to-gray-500';
+                      return (
+                        <Link
+                          key={item.id}
+                          to={`/outfit/${item.id}`}
+                          onClick={() => setVisualSearchOpen(false)}
+                          className="group bg-gray-50 dark:bg-gray-800 rounded-2xl p-2.5 border border-gray-100 dark:border-gray-700/60 hover:shadow-lg transition-all"
+                        >
+                          <div className="aspect-[3/4] w-full rounded-xl overflow-hidden relative mb-2">
+                            <SmartImage
+                              src={item.image}
+                              alt={item.title || item.name}
+                              outfit={item}
+                              imgClassName="group-hover:scale-105 transition-transform"
+                            />
+                            <span className={`absolute top-2 left-2 px-2 py-0.5 rounded-full text-[9px] font-black text-white backdrop-blur-md z-10 bg-gradient-to-r ${scoreColor}`}>
+                              {score}% Match
+                            </span>
+                          </div>
+                          <h5 className="text-xs font-bold truncate">{item.title || item.name}</h5>
+                          <p className="text-[10px] text-gray-500 truncate mt-0.5">{item.match_reason}</p>
+
+                          {item.palette_swatches && item.palette_swatches.length > 0 && (
+                            <div className="flex items-center gap-1 mt-2" title="Extracted outfit palette">
+                              {item.palette_swatches.slice(0, 4).map((sw, i) => (
+                                <div
+                                  key={i}
+                                  className="w-4 h-4 rounded-full border border-black/10 shadow-inner flex-1 min-w-0"
+                                  style={{
+                                    backgroundColor: sw.hex || `rgb(${(sw.rgb || [128,128,128]).join(',')})`,
+                                    maxWidth: '1.25rem'
+                                  }}
+                                  title={`${sw.name || 'Color'} ${sw.percentage ? `(${sw.percentage}%)` : ''}`}
+                                />
+                              ))}
+                            </div>
+                          )}
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               ) : null}
@@ -369,10 +431,10 @@ const Gallery = () => {
       </AnimatePresence>
 
       {/* Main Gallery Grid */}
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1600px] mx-auto px-3 sm:px-6 lg:px-8">
         {loading && !loadMoreLoading ? (
-          <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-6">
-            {[1,2,3,4,5,6].map(i => <div key={i} className="mb-6 bg-gray-100 dark:bg-gray-800 rounded-3xl animate-pulse h-80 shadow-sm" />)}
+          <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-3 sm:gap-6">
+            {[1,2,3,4,5,6].map(i => <div key={i} className="mb-3 sm:mb-6 bg-gray-100 dark:bg-gray-800 rounded-2xl sm:rounded-3xl animate-pulse h-64 sm:h-80 shadow-sm" />)}
           </div>
         ) : error ? (
           <div className="max-w-md mx-auto text-center py-20 space-y-4">
@@ -384,11 +446,17 @@ const Gallery = () => {
           </div>
         ) : (
           <>
-            <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-6">
+            <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-3 sm:gap-6">
               {filteredOutfits.map((outfit, index) => (
-                <motion.div key={outfit.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: (index % 10) * 0.04 }} className="mb-6 break-inside-avoid group relative">
-                  <div className="relative overflow-hidden rounded-3xl bg-gray-100 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-2xl transition-all duration-500">
-                    <img src={`${BASE_URL}${outfit.image}`} alt={outfit.name} loading="lazy" className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105" style={{ minHeight: '200px' }} />
+                <motion.div key={outfit.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: (index % 10) * 0.04 }} className="mb-3 sm:mb-6 break-inside-avoid group relative">
+                  <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gray-100 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-2xl transition-all duration-500 aspect-[3/4]">
+                    <SmartImage
+                      src={outfit.image}
+                      alt={outfit.name}
+                      outfit={outfit}
+                      imgClassName="transform transition-transform duration-700 group-hover:scale-105"
+                      wrapperClassName="w-full h-full"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-5">
                       <div className="space-y-3">
                         <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-wider rounded-full border border-white/20">

@@ -323,16 +323,27 @@ def ai_chat():
     # Tier 4: High-Quality Fashion Domain Fallback (Context-Aware)
     return smart_fallback_chat(user_message, ctx)
 
+def professional_fallback_chat(message, gender="female", occasion="Casual", body_type="Rectangle", skin_tone="Medium", style_preference="Casual", weather="pleasant"):
+    ctx = {
+        'gender': gender,
+        'body_type': body_type,
+        'skin_tone': skin_tone,
+        'style_preference': style_preference,
+        'weather': weather,
+        'occasion': occasion
+    }
+    return smart_fallback_chat(message, ctx, engine_name='fallback')
+
 # ==============================================================================
 # INTELLIGENT RULE-BASED DOMAIN STYLIST (WHEN AI APIS ARE OFFLINE)
 # ==============================================================================
-def smart_fallback_chat(user_message, ctx):
+def smart_fallback_chat(user_message, ctx, engine_name='stylist_engine'):
     """High-quality fashion fallback that intelligently answers color queries vs outfit queries."""
     msg = user_message.lower()
-    gender = ctx['gender']
-    body_type = ctx['body_type']
-    skin_tone = ctx['skin_tone']
-    style = ctx['style_preference']
+    gender = ctx.get('gender') or 'female'
+    body_type = ctx.get('body_type') or 'Rectangle'
+    skin_tone = ctx.get('skin_tone') or 'Medium'
+    style = ctx.get('style_preference') or 'Casual'
     weather = ctx.get('weather') or 'pleasant'
     occasion = ctx.get('occasion') or 'Casual'
 
@@ -355,14 +366,14 @@ def smart_fallback_chat(user_message, ctx):
             accent_pops = "Silver Metallic, Ice Blue, Ruby Red"
             styling_tip = "Create high-contrast combinations. Pair dark structured overcoats with jewel-toned knitwear or silver metallic jewelry."
         elif 'monsoon' in msg or 'rain' in msg:
-            palette_title = "Monsoon & Rainy Season Palette 🌧️"
+            palette_title = "Monsoon & Rainy Season Color Guide 🌧️"
             core_neutrals = "Dark Navy, Charcoal Grey, Olive Brown (mud-resistant)"
             statement_colors = "Teal Blue, Mustard Yellow, Forest Green"
             accent_pops = "Bright Tangerine or Cobalt umbrella/footwear accents"
             styling_tip = "Opt for darker base bottoms to resist water splashes, illuminated with joyful saturated jewel tops."
         else:
             # Based on user's skin tone
-            palette_title = f"Curated Color Harmony for {skin_tone.title()} Skin Tone 🎨"
+            palette_title = f"Curated Color Guide for {skin_tone.title()} Skin Tone 🎨"
             if skin_tone.lower() == 'fair':
                 core_neutrals = "Soft Navy, Slate Grey, Heather Oatmeal, Rose Taupe"
                 statement_colors = "Emerald Green, Royal Sapphire, Soft Lavender, Burgundy"
@@ -381,7 +392,7 @@ def smart_fallback_chat(user_message, ctx):
 
         reply = f"""### {palette_title}
 
-🎨 **Core Neutrals (Base)**:
+🎨 **Best Colors & Core Neutrals**:
 - {core_neutrals}
 
 ✨ **Hero Statement Colors**:
@@ -390,15 +401,20 @@ def smart_fallback_chat(user_message, ctx):
 💎 **Accent Pops**:
 - {accent_pops}
 
-💡 **Stylist Rule for {body_type} Body & {style} Vibe**:
+💡 **Stylist Rule for {body_type.title()} Body & {style} Vibe**:
 - {styling_tip}
 - **Wardrobe Tip**: Pair your top and bottoms using harmonious contrast, anchoring with clean minimalist footwear.
 """
-        return jsonify({'reply': reply, 'engine': 'stylist_engine', 'category': 'color_guide'})
+        return jsonify({
+            'reply': reply,
+            'engine': engine_name,
+            'category': 'color_guide',
+            'quick_replies': ['Outfit Ideas', 'Color Suggestions', 'Summer Colors', 'Office Outfit', 'Accessories Match']
+        })
 
     # Otherwise: Outfit Recommendation Flow
     fit_advice_dict = {
-        'Pear': "A-line silhouettes and structured tops balance your waist and hips effortlessly.",
+        'Pear': "A-line silhouettes and structured tops balance your waist and hips effortlessly, adding volume to shoulders.",
         'Apple': "V-neck cuts, empire waists, and vertical fluid layers elongate your upper torso beautifully.",
         'Hourglass': "Highlight your natural waistline with belted blazers, tailored wrap silhouettes, and high-rise bottoms.",
         'Rectangle': "Create dimension and curves using peplum accents, belt detailing, and layered outerwear.",
@@ -413,11 +429,11 @@ def smart_fallback_chat(user_message, ctx):
         },
         'Party': {
             'female': ("Sleek Satin Cowl-Neck Camisole / Sequin Wrap Top", "High-Rise Pleated Wide-Leg Pants / Leather Mini Skirt", "Strappy Stiletto Heels or Metallic Mules", "Statement Earrings, Shimmer Clutch, Layered Delicate Necklaces"),
-            'male': ("Midnight Black Tailored Silk-Blend Shirt", "Slim-Fit Dark Indigo Trousers", "Polished Chelsea Boots", "Sleek Silver Signet Ring, Leather Jacket Layer")
+            'male': ("Black Slim Fit Shirt / Midnight Tailored Silk-Blend Shirt", "Slim-Fit Dark Indigo Trousers", "Polished Chelsea Boots", "Sleek Silver Signet Ring, Leather Jacket Layer")
         },
         'Wedding': {
             'female': ("Embroidered Zari Silk Kurta or Choli", "Flared Organza Lehenga Skirt / Palazzo", "Embellished Embroidered Juttis or Golden Block Heels", "Kundan Choker, Maang Tikka, Potli Bag"),
-            'male': ("Raw Silk Embroidered Sherwani or Bandhgala", "Tapered Silk Churidar / Trousers", "Traditional Handcrafted Mojaris", "Silk Pocket Square, Statement Brooch")
+            'male': ("Raw Silk Embroidered Sherwani or Bandhgala Suit", "Tapered Silk Churidar / Trousers", "Traditional Handcrafted Mojaris", "Silk Pocket Square, Statement Brooch")
         },
         'Date': {
             'female': ("Soft Ribbed Knit Top or Sweetheart Neckline Blouse", "Tailored Straight-Leg Jeans or Satin Midi Skirt", "Minimalist Block Heel Sandals", "Dainty Pendant, Mini Crossbody Bag, Subtle Perfume"),
@@ -441,8 +457,9 @@ def smart_fallback_chat(user_message, ctx):
         }
     }
 
-    occ_key = occasion if occasion in outfit_matrix else 'Casual'
-    top, bottom, footwear, accessories = outfit_matrix[occ_key].get(gender, outfit_matrix[occ_key]['female'])
+    occ_title = occasion.title() if occasion else 'Casual'
+    occ_key = occ_title if occ_title in outfit_matrix else 'Casual'
+    top, bottom, footwear, accessories = outfit_matrix[occ_key].get(gender.lower(), outfit_matrix[occ_key]['female'])
 
     # Tie in closet or liked items if available
     tie_in_note = ""
@@ -466,12 +483,12 @@ def smart_fallback_chat(user_message, ctx):
 - **Palette**: {'Navy, Crisp White, Slate Grey, Camel' if occ_key == 'Office' else 'Emerald, Ruby, Champagne Gold' if occ_key == 'Wedding' else 'Olive, Rust, Crisp White, Indigo'}
 - **Color Harmony**: Balanced contrast curated for your **{skin_tone.title()}** skin tone.
 
-🧵 **Fabric & 👜 Accessories**:
-- **Fabric**: {'Breathable Cotton & Linen' if 'hot' in weather else 'Structured Wool-Blend & Knits' if 'cold' in weather else 'Fine Poplin & Silk Blends'} (ideal for {weather} weather)
+🧵 **Fabric Suggestion & 👜 Accessories**:
+- **Fabric Suggestion**: {'Breathable Cotton & Linen' if 'hot' in weather else 'Structured Wool-Blend & Knits' if 'cold' in weather else 'Fine Poplin & Silk Blends'} (ideal for {weather} weather)
 - **Accessories**: {accessories}{tie_in_note}
 """
     return jsonify({
         'reply': reply,
-        'engine': 'stylist_engine',
-        'quick_replies': ['Summer Colors', 'Office Outfit', 'Accessories Match', 'Style for my Body Type']
+        'engine': engine_name,
+        'quick_replies': ['Outfit Ideas', 'Color Suggestions', 'Summer Colors', 'Office Outfit', 'Accessories Match', 'Style for my Body Type']
     })

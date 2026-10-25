@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiUser, FiHeart, FiTrendingUp, FiLogOut, FiImage, FiAward, FiFileText, FiDroplet, FiLayers, FiEye, FiCheck, FiShoppingBag, FiStar, FiActivity, FiArrowRight, FiShield, FiLayout, FiRefreshCw, FiX, FiInfo, FiZap, FiBox } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
-import { userService, BASE_URL } from '../services/api';
+import { userService } from '../services/api';
+import SmartImage from '../components/SmartImage';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -194,13 +195,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-10 bg-background dark:bg-darkBackground text-text dark:text-darkText font-sans">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen overflow-x-hidden pt-20 pb-10 bg-background dark:bg-darkBackground text-text dark:text-darkText font-sans">
+      <div className="max-w-6xl w-full min-w-0 mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Profile Header */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative rounded-[2.5rem] bg-black text-white p-8 md:p-10 mb-8 shadow-2xl overflow-hidden border border-white/5">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative rounded-[1.75rem] sm:rounded-[2.5rem] bg-black text-white p-5 sm:p-8 md:p-10 mb-6 sm:mb-8 shadow-2xl overflow-hidden border border-white/5">
           <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary/10 to-transparent" />
-          <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+          <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 sm:gap-8">
             <div className="relative group">
               <div className="w-24 h-24 rounded-[2rem] bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-4xl font-black shadow-xl overflow-hidden">
                 {user.avatar_url ? (
@@ -219,7 +220,7 @@ const Dashboard = () => {
                 <FiRefreshCw size={14} />
               </button>
             </div>
-            <div className="text-center md:text-left flex-1">
+            <div className="text-center md:text-left flex-1 min-w-0 w-full">
               <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start mb-2">
                 <h1 
                   className="text-3xl font-black uppercase tracking-tighter cursor-pointer hover:text-primary transition-colors"
@@ -234,19 +235,19 @@ const Dashboard = () => {
                 </h1>
                 <span className="bg-white/10 text-primary text-[8px] font-black uppercase px-2 py-1 rounded-md border border-white/5 tracking-widest">PRO Member</span>
               </div>
-              <p className="text-white/30 font-bold text-xs tracking-widest uppercase mb-6">{user.email} • {user.gender}</p>
-              <div className="flex gap-8 justify-center md:justify-start">
-                <div className="text-center">
+              <p className="text-white/30 font-bold text-xs tracking-widest uppercase mb-6 [overflow-wrap:anywhere]">{user.email} • {user.gender}</p>
+              <div className="grid grid-cols-3 gap-2 sm:flex sm:gap-8 justify-center md:justify-start">
+                <div className="min-w-0 text-center">
                   <span className="text-[8px] font-black uppercase text-white/20 tracking-widest block">Wardrobe</span>
                   <p className="text-lg font-black">{stats.total_liked}</p>
                 </div>
-                <div className="text-center">
+                <div className="min-w-0 text-center">
                   <span className="text-[8px] font-black uppercase text-white/20 tracking-widest block">Guides</span>
                   <p className="text-lg font-black">{stats.total_saved}</p>
                 </div>
-                <div className="text-center">
+                <div className="min-w-0 text-center">
                   <span className="text-[8px] font-black uppercase text-white/20 tracking-widest block">Focus</span>
-                  <p className="text-lg font-black">{stats.top_occasion}</p>
+                  <p className="text-base sm:text-lg font-black break-words">{stats.top_occasion}</p>
                 </div>
               </div>
             </div>
@@ -255,11 +256,11 @@ const Dashboard = () => {
 
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Sidebar */}
-          <div className="lg:col-span-3 space-y-4">
-            <div className="bg-white dark:bg-gray-900 rounded-[2rem] p-4 md:p-6 border border-gray-100 dark:border-gray-800 shadow-sm">
-              <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0">
+          <div className="lg:col-span-3 min-w-0 space-y-4">
+            <div className="bg-white dark:bg-gray-900 rounded-[1.5rem] sm:rounded-[2rem] p-3 sm:p-4 md:p-6 border border-gray-100 dark:border-gray-800 shadow-sm">
+              <div className="grid grid-cols-2 gap-2 lg:flex lg:flex-col pb-2 lg:pb-0">
                 {tabs.map(t => (
-                  <button key={t.id} onClick={() => setActiveTab(t.id)} className={`flex items-center gap-3 px-5 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${activeTab === t.id ? 'bg-primary text-white shadow-lg' : 'hover:bg-gray-50 dark:hover:bg-gray-800 opacity-40'}`}>
+                  <button key={t.id} onClick={() => setActiveTab(t.id)} className={`min-w-0 justify-center lg:justify-start flex items-center gap-2 sm:gap-3 px-2 sm:px-5 py-3 sm:py-4 rounded-xl font-black text-[10px] uppercase tracking-widest whitespace-nowrap transition-all ${activeTab === t.id ? 'bg-primary text-white shadow-lg' : 'hover:bg-gray-50 dark:hover:bg-gray-800 opacity-40'}`}>
                     <t.icon size={14} /> {t.name}
                   </button>
                 ))}
@@ -273,7 +274,7 @@ const Dashboard = () => {
           </div>
 
           {/* Content */}
-          <div className="lg:col-span-9">
+          <div className="lg:col-span-9 min-w-0">
             <AnimatePresence mode="wait">
               {activeTab === 'overview' && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
@@ -296,26 +297,26 @@ const Dashboard = () => {
                   </div>
                   
                   {/* Advanced Analytics Section */}
-                  <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
+                  <div className="bg-white dark:bg-gray-900 rounded-[1.75rem] sm:rounded-[2.5rem] p-5 sm:p-8 border border-gray-100 dark:border-gray-800 shadow-sm">
                     <h3 className="text-sm font-black uppercase tracking-widest mb-8 flex items-center gap-3">
                       <FiActivity className="text-primary" /> Visual Insights Matrix
                     </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center">
                       <div>
                         <span className="text-[10px] font-black uppercase opacity-40 block mb-2">Primary Style</span>
-                        <p className="text-2xl font-black text-secondary uppercase tracking-tighter">{stats.top_occasion}</p>
+                        <p className="text-xl sm:text-2xl font-black text-secondary uppercase tracking-tighter break-words">{stats.top_occasion}</p>
                       </div>
                       <div>
                         <span className="text-[10px] font-black uppercase opacity-40 block mb-2">Vault Size</span>
-                        <p className="text-2xl font-black text-primary uppercase tracking-tighter">{stats.total_liked}</p>
+                        <p className="text-xl sm:text-2xl font-black text-primary uppercase tracking-tighter">{stats.total_liked}</p>
                       </div>
                       <div>
                         <span className="text-[10px] font-black uppercase opacity-40 block mb-2">Neural Reports</span>
-                        <p className="text-2xl font-black uppercase tracking-tighter">{stats.total_saved}</p>
+                        <p className="text-xl sm:text-2xl font-black uppercase tracking-tighter">{stats.total_saved}</p>
                       </div>
                       <div>
                         <span className="text-[10px] font-black uppercase opacity-40 block mb-2">Member Since</span>
-                        <p className="text-2xl font-black uppercase tracking-tighter">{user.member_since?.split(' ')[1] || '2026'}</p>
+                        <p className="text-xl sm:text-2xl font-black uppercase tracking-tighter">{user.member_since?.split(' ')[1] || '2026'}</p>
                       </div>
                     </div>
                   </div>
@@ -373,7 +374,13 @@ const Dashboard = () => {
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                       {liked_outfits.map((outfit, i) => (
                         <div key={i} className="group relative aspect-square rounded-[2rem] overflow-hidden shadow-xl">
-                          <img src={outfit.image.startsWith('http') ? outfit.image : `${BASE_URL}${outfit.image}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={outfit.name} />
+                        <SmartImage
+                          src={outfit.image}
+                          outfit={outfit}
+                          alt={outfit.name}
+                          imgClassName="object-cover group-hover:scale-110 transition-transform duration-700"
+                          wrapperClassName="w-full h-full"
+                        />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end">
                             <p className="text-white font-black uppercase text-xs tracking-widest mb-2">{outfit.name}</p>
                             <button onClick={() => navigate(`/outfit/${outfit.id}`)} className="bg-white text-black px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">Explore</button>

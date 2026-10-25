@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.recommendation import SavedRecommendation
 from models.user import User
 from config.db import db
+from models.closet import ClosetItem
 import json
 import os
 import random
@@ -165,7 +166,136 @@ def get_expert_styling_logic(gender, occasion, body_type):
             {"title": "The Modern Minimalist", "look": "Monochrome Basics", "advice": "Keep it simple. Good shoes and a watch elevate any outfit."}
         ]
 
+def _closet_outfits_for(user_id, occasion, season, limit=8):
+    """Build rich outfit suggestions from the user's own available closet items,
+    filtered by occasion/season and color harmony."""
+    try:
+        items = ClosetItem.query.filter_by(user_id=user_id).all()
+    except Exception:
+        return []
+    items = [i for i in items if i.is_available is not False]
+    if not items:
+        return []
+
+    def _img_url(it):
+        url = it.image_url or ''
+        if 'closet/' in url:
+            return f'/api/closet/items/{it.id}/image'
+        return url or '/images/classic_denim.jpg'
+
+    def _piece_dict(it):
+        return {
+            'closet_item_id': it.id,
+            'id': it.id,
+            'name': it.name,
+            'category': it.category,
+            'color': it.color_name or 'Classic Neutral',
+            'color_hex': it.color_hex or '#4A5568',
+            'image_url': _img_url(it),
+            'style': it.style or 'casual',
+            'occasion': it.occasion or 'casual'
+        }
+
+    def _ok_occ(v):
+        return occasion in ('', 'all') or v in (occasion, 'all')
+
+    def _ok_sea(v):
+        return season in ('', 'all', 'all-season') or v in (season, 'all-season', 'all')
+
+    filtered = [i for i in items if _ok_occ(i.occasion) and _ok_sea(i.season)]
+    if not filtered:
+        filtered = items  # graceful fallback – don't fail on partial closet
+
+    tops = [i for i in filtered if i.category == 'top']
+    bottoms = [i for i in filtered if i.category == 'bottom']
+    dresses = [i for i in filtered if i.category == 'dress']
+    shoes = [i for i in filtered if i.category == 'shoes']
+    outerwear = [i for i in filtered if i.category == 'outerwear']
+    accessories = [i for i in filtered if i.category == 'accessory']
+
+    outfits = []
+
+    # 1. Two-Piece Ensembles (Top + Bottom)
+    for top in tops[:5]:
+        for bot in bottoms[:5]:
+            pieces = [_piece_dict(top), _piece_dict(bot)]
+            if shoes:
+                pieces.append(_piece_dict(shoes[0]))
+            if outerwear:
+                pieces.append(_piece_dict(outerwear[0]))
+            if accessories:
+                pieces.append(_piece_dict(accessories[0]))
+
+            outfits.append({
+                'id': f"closet_look_{top.id}_{bot.id}",
+                'title': f"{top.color_name} {top.name} + {bot.name}",
+                'type': 'Two-Piece Ensemble',
+                'occasion': top.occasion if top.occasion != 'all' else occasion.title() if occasion else 'Casual',
+                'synergy_score': 94 if top.occasion == bot.occasion else 88,
+                'pieces': pieces,
+                'styling_tip': f"Harmonize your {top.color_name} {top.name} with {bot.name} for an elevated, balanced silhouette."
+            })
+            if len(outfits) >= limit:
+                return outfits
+
+    # 2. One-Piece Ensembles (Dresses)
+    for dr in dresses[:3]:
+        pieces = [_piece_dict(dr)]
+        if shoes:
+            pieces.append(_piece_dict(shoes[0]))
+        if outerwear:
+            pieces.append(_piece_dict(outerwear[0]))
+        if accessories:
+            pieces.append(_piece_dict(accessories[0]))
+
+        outfits.append({
+            'id': f"closet_look_dress_{dr.id}",
+            'title': f"{dr.color_name} {dr.name} Statement",
+            'type': 'One-Piece Statement',
+            'occasion': dr.occasion.title() if dr.occasion != 'all' else 'Party',
+            'synergy_score': 96,
+            'pieces': pieces,
+            'styling_tip': f"Elevate your {dr.name} with clean layering and matching footwear."
+        })
+        if len(outfits) >= limit:
+            return outfits
+
+    # 3. Hybrid Looks if only Tops or only Bottoms exist
+    if tops and not bottoms:
+        for top in tops[:3]:
+            pieces = [_piece_dict(top)]
+            if accessories:
+                pieces.append(_piece_dict(accessories[0]))
+            outfits.append({
+                'id': f"closet_look_top_{top.id}",
+                'title': f"{top.color_name} {top.name} + Tailored Slim Bottom",
+                'type': 'Curated Wardrobe Pairing',
+                'occasion': top.occasion.title() if top.occasion != 'all' else 'Smart Casual',
+                'synergy_score': 90,
+                'pieces': pieces,
+                'styling_tip': f"Style your {top.name} with neutral slim-fit trousers or dark denim to let the top stand out."
+            })
+
+    elif bottoms and not tops:
+        for bot in bottoms[:3]:
+            pieces = [_piece_dict(bot)]
+            if shoes:
+                pieces.append(_piece_dict(shoes[0]))
+            outfits.append({
+                'id': f"closet_look_bot_{bot.id}",
+                'title': f"Crisp Neutral Top + {bot.color_name} {bot.name}",
+                'type': 'Curated Wardrobe Pairing',
+                'occasion': bot.occasion.title() if bot.occasion != 'all' else 'Casual',
+                'synergy_score': 90,
+                'pieces': pieces,
+                'styling_tip': f"Pair these {bot.name} with a crisp white shirt or tucked-in knit top for clean proportions."
+            })
+
+    return outfits[:limit]
+
+
 @recommendations_bp.route('/recommendations', methods=['POST'])
+@jwt_required(optional=True)
 def recommend():
     d = request.json
     gender = d.get('gender', 'female').lower()
@@ -198,15 +328,34 @@ def recommend():
         f"For {occasion} wear, comfort is just as important as style."
     ]
     
-    return jsonify({
+    persona_list = personas
+    response = {
       "recommended_colors": recommended_colors,
       "avoid_colors": avoid_colors,
       "fabrics": ["Silk", "Cotton", "Linen", "Velvet"] if 'deep' in skin_tone or 'dark' in skin_tone else ["Linen", "Cotton", "Silk", "Georgette"],
       "detected_tone": d.get('skin_tone', 'Medium'),
       "skin_hex": d.get('skin_hex', '#B28F69'),
-      "personas": personas,
+      "personas": persona_list,
       "styling_tip": random.choice(tips)
-    })
+    }
+
+    # If the caller is authenticated, enrich with outfits from their closet.
+    try:
+        email = get_jwt_identity()
+        if email:
+            user = User.query.filter_by(email=email).first()
+            if user:
+                closet_outfits = _closet_outfits_for(
+                    user.id,
+                    str(d.get('occasion', occasion)).lower(),
+                    str(d.get('season', 'all')).lower(),
+                )
+                if closet_outfits:
+                    response['closet_outfits'] = closet_outfits
+    except Exception:
+        pass
+
+    return jsonify(response)
 
 def save_rec_to_json(user_email, rec_data):
     try:

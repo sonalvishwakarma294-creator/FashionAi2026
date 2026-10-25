@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiHeart, FiArrowLeft, FiX, FiCheck } from 'react-icons/fi';
-import { galleryService, BASE_URL } from '../services/api';
+import { galleryService } from '../services/api';
+import SmartImage from '../components/SmartImage';
 
 const OutfitDetail = () => {
   const { id } = useParams();
@@ -76,11 +77,15 @@ const OutfitDetail = () => {
         animate={{ scale: 1, opacity: 1 }}
         className="w-full h-full p-4 md:p-12 lg:p-20 flex items-center justify-center"
       >
-        <img 
-          src={`${BASE_URL}${outfit.image}`} 
-          alt={outfit.name} 
-          className="max-w-full max-h-full object-contain rounded-3xl shadow-2xl border border-white/5"
-        />
+        <div className="max-w-3xl max-h-full w-full aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border border-white/5">
+          <SmartImage
+            src={outfit.image}
+            alt={outfit.name}
+            outfit={outfit}
+            imgClassName="object-contain max-w-full max-h-full"
+            wrapperClassName="max-w-full max-h-full w-full h-full"
+          />
+        </div>
       </motion.div>
 
       {/* Info Overlay Bottom */}

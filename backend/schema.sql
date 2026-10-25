@@ -1,12 +1,10 @@
--- AI Fashion Recommendation System - Complete Database Schema
--- Run: mysql -u root -p fashion_ai < backend/schema.sql (password empty)
-
-DROP DATABASE IF EXISTS fashion_ai;
-CREATE DATABASE fashion_ai CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- Run: mysql -u root -p fashion_ai < backend/schema.sql
+-- CAUTION: Do NOT drop database in production
+CREATE DATABASE IF NOT EXISTS fashion_ai CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE fashion_ai;
 
 -- Users table (enhanced with hashed_password, is_admin)
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(255) UNIQUE NOT NULL,

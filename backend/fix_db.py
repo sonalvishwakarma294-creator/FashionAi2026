@@ -8,6 +8,12 @@ from models.recommendation import SavedRecommendation
 from models.feedback import Feedback
 print('🔧 Fixing DB schema...')
 
+# Safety protection to prevent accidental loss of data
+if os.getenv('CONFIRM_DB_RESET', '').lower() not in ('1', 'true', 'yes'):
+    print("⚠️ WARNING: fix_db.py will DROP ALL TABLES and reset the database.")
+    print("To proceed, set CONFIRM_DB_RESET=true (e.g., in terminal: $env:CONFIRM_DB_RESET='true'; python fix_db.py)")
+    exit(1)
+
 with app.app_context():
     # Drop problematic tables and recreate
     db.drop_all()

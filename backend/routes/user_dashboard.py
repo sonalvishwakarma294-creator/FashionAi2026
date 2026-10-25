@@ -38,7 +38,7 @@ def get_dashboard_stats():
                     users_json = json.load(f)
                     if user_email in users_json:
                         u = users_json[user_email]
-                        user_data = {"name": u['name'], "email": user_email, "gender": u.get("gender", "female"), "member_since": u.get("memberSince", "March 2026")}
+                        user_data = {"name": u['name'], "email": user_email, "gender": u.get("gender", "female"), "member_since": u.get("memberSince", "March 2026"), "is_admin": bool(u.get("is_admin", False)), "role": u.get("role", "user")}
             except:
                 pass
 

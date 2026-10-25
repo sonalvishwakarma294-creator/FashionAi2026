@@ -1,9 +1,10 @@
-from flask import Blueprint, request, jsonify, send_from_directory
+from flask import Blueprint, request, jsonify, send_from_directory, abort
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from config.db import db
 from models.outfit import Outfit
 from models.like import Like
 from models.user import User
+from routes.admin import admin_required
 import os
 import json
 
@@ -34,7 +35,9 @@ def get_or_create_user(email):
                         email=email,
                         hashed_password=u_data['password'], # Keep existing hash
                         gender=u_data.get('gender', 'female'),
-                        member_since=u_data.get('memberSince', 'March 2026')
+                        member_since=u_data.get('memberSince', 'March 2026'),
+                        is_admin=bool(u_data.get('is_admin', False)),
+                        role=u_data.get('role', 'user'),
                     )
                     db.session.add(new_user)
                     db.session.commit()
@@ -49,6 +52,10 @@ def get_or_create_user(email):
 
 @gallery_bp.route('/images/<path:filename>')
 def serve_images(filename):
+    # Closet uploads are private — served only through the authenticated
+    # /api/closet/items/<id>/image endpoint. Block them here too.
+    if filename.replace('\\', '/').startswith('closet/'):
+        abort(404)
     return send_from_directory(IMAGES_DIR, filename)
 
 @gallery_bp.route('/gallery', methods=['GET'])
@@ -80,6 +87,7 @@ def get_outfit(outfit_id):
     return jsonify({"error": "not found"}), 404
 
 @gallery_bp.route('/gallery/refresh', methods=['POST'])
+@admin_required
 def refresh_gallery():
     # This would normally trigger a re-scan of the images folder
     # For now, we'll return a success message

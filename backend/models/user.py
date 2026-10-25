@@ -19,6 +19,10 @@ class User(db.Model):
     longitude = db.Column(db.Float, nullable=True)
     location_name = db.Column(db.String(200), nullable=True)
     
+    # Password recovery
+    reset_token = db.Column(db.String(255), nullable=True, unique=True)
+    reset_token_expires_at = db.Column(db.DateTime, nullable=True)
+    
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

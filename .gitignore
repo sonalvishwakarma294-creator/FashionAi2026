@@ -14,14 +14,19 @@ build/
 .DS_Store
 *.pem
 
-# Environment variables
+# ============================================================
+# Environment variable files — NEVER commit secrets to git
+# ============================================================
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+backend/.env
+backend/.env.local
+backend/.env.production.local
 
-# Vike
+# Vite
 .vite/
 
 # Python
@@ -32,7 +37,6 @@ __pycache__/
 .venv/
 venv/
 env/
-.env
 
 # Logs
 npm-debug.log*
@@ -42,8 +46,25 @@ yarn-error.log*
 
 # Project specific
 backend/fashion.db
+backend/users.json
+backend/likes.json
 out.log
 err.log
 test_ai.py
 list_models.py
 diagnostic.py
+
+# MySQL password reset scripts (contain passwords)
+backend/reset_mysql_password.ps1
+backend/mysql_reset_init.sql
+
+# IDE & Editor folders
+.kilo/
+.idea/
+.vscode/
+
+# Uploaded user files (stored at runtime, not source-controlled)
+images/closet/*
+images/temp_search/*
+images/uploads/*
+

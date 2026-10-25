@@ -20,6 +20,6 @@ def add_feedback():
         db.session.add(new_feedback)
         db.session.commit()
         return jsonify({'message': 'Feedback submitted successfully', 'feedback': new_feedback.to_dict()}), 201
-    except Exception as e:
+    except Exception:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': 'Could not submit feedback. Please try again later.'}), 500

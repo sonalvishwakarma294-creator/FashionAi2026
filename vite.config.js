@@ -51,6 +51,16 @@ export default defineConfig({
         target: 'http://127.0.0.1:5001',
         changeOrigin: true,
         secure: false,
+        ws: true,
+        configure: (proxy) => {
+          proxy.on('error', (err, req, res) => {
+            console.warn('[proxy] backend unreachable:', err.message);
+            if (res && !res.headersSent) {
+              res.writeHead(503, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ error: 'Backend is restarting. Please try again in a moment.' }));
+            }
+          });
+        },
       }
     }
   }

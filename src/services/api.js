@@ -1,27 +1,26 @@
 import axios from 'axios';
 
-// When using Vite proxy, we use relative paths to avoid CORS
-export const BASE_URL = window.location.origin;
 const API_BASE_URL = '/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
-// Interceptor to add JWT token to requests
+// Interceptor to add JWT token and default Content-Type to requests
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('fashionToken');
     if (token && token !== 'null' && token !== 'undefined') {
       config.headers.Authorization = `Bearer ${token}`;
     } else {
-      // For protected routes, we can log a warning if token is missing
       if (config.url.includes('/save') || config.url.includes('/user/')) {
         console.warn(`Request to protected route ${config.url} without token.`);
       }
+    }
+    // Only set JSON content-type when NOT sending FormData
+    // (browser must set multipart/form-data with boundary automatically)
+    if (!(config.data instanceof FormData)) {
+      config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json';
     }
     return config;
   },
@@ -33,17 +32,12 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401 || error.response?.status === 422) {
-      // Don't clear storage or redirect for login failures
       if (error.config?.url?.includes('/auth/login')) {
         return Promise.reject(error);
       }
-
-      // Token expired or invalid
       console.warn("Session expired or invalid token. Clearing storage.");
       localStorage.removeItem('fashionToken');
       localStorage.removeItem('fashionUser');
-
-      // If we're on a page that needs login (not Home, About, etc.)
       if (!['/', '/login', '/signup', '/about'].includes(window.location.pathname)) {
         window.location.href = '/login?msg=session_expired';
       }
@@ -52,10 +46,42 @@ api.interceptors.response.use(
   }
 );
 
+const INFERRED_BACKEND_BASE = (() => {
+  const host = window.location.hostname || '127.0.0.1';
+  const devPort = 5001;
+  if (window.location.port === '5173') {
+    return `http://${host}:${devPort}`;
+  }
+  if (window.location.port === String(devPort)) {
+    return window.location.origin;
+  }
+  return window.location.origin;
+})();
+
+export const BASE_URL = window.location.origin;
+export const BACKEND_BASE_URL = INFERRED_BACKEND_BASE;
+
+export const getImageUrl = (imagePath) => {
+  if (!imagePath) return '';
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    return imagePath;
+  }
+  if (imagePath.startsWith('data:')) {
+    return imagePath;
+  }
+  if (imagePath.startsWith('//')) {
+    return imagePath;
+  }
+  return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+};
+
 export const authService = {
   login: (credentials) => api.post('/auth/login', credentials),
   register: (userData) => api.post('/auth/register', userData),
   getProfile: () => api.get('/auth/profile'), // Using full profile route
+  forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
+  validateResetToken: (token) => api.post('/auth/validate-reset-token', { token }),
+  resetPassword: (token, password) => api.post('/auth/reset-password', { token, password }),
 };
 export const userService = {
   getDashboardStats: () => api.get('/user/dashboard-stats'),
@@ -101,9 +127,19 @@ export const adminService = {
 
 export const closetService = {
   getItems: (params = {}) => api.get('/closet/items', { params }),
-  addItem: (formData) => api.post('/closet/items', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  }),
+  getItem: (id) => api.get(`/closet/items/${id}`),
+  getItemImage: (id) => api.get(`/closet/items/${id}/image`, { responseType: 'blob' }),
+  addItem: (formData) => {
+    // FormData: let browser set Content-Type with multipart boundary automatically
+    if (formData instanceof FormData) {
+      return api.post('/closet/items', formData, {
+        headers: { 'Content-Type': undefined },
+      });
+    }
+    return api.post('/closet/items', formData);
+  },
+  updateItem: (id, data) => api.put(`/closet/items/${id}`, data),
+  setAvailability: (id, isAvailable) => api.patch(`/closet/items/${id}/availability`, { is_available: isAvailable }),
   deleteItem: (id) => api.delete(`/closet/items/${id}`),
   generateCapsules: (data = {}) => api.post('/closet/capsule-generate', data),
 };
@@ -113,6 +149,7 @@ export const searchService = {
     headers: { 'Content-Type': 'multipart/form-data' },
   }),
   semanticSearch: (q) => api.get('/search/semantic', { params: { q } }),
+  indexPalettes: () => api.post('/search/index/outfits'),
 };
 
 export default api;

@@ -166,19 +166,19 @@ const Occasion = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
-          <span className="text-primary font-black uppercase text-xs tracking-[0.3em] mb-4 block">Occasion Intelligence</span>
-          <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter uppercase">Dress For The <span className="text-primary">Moment</span></h1>
-          <p className="text-gray-500 max-w-2xl mx-auto text-lg font-medium leading-relaxed">Select an occasion and your gender to receive a professionally curated outfit blueprint with a custom color palette.</p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10 sm:mb-16">
+          <span className="text-primary font-black uppercase text-xs tracking-[0.3em] mb-3 sm:mb-4 block">Occasion Intelligence</span>
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-black mb-4 sm:mb-6 tracking-tighter uppercase">Dress For The <span className="text-primary">Moment</span></h1>
+          <p className="text-gray-500 max-w-2xl mx-auto text-sm sm:text-lg font-medium leading-relaxed">Select an occasion and your gender to receive a professionally curated outfit blueprint with a custom color palette.</p>
         </motion.div>
 
         {/* Gender Toggle */}
-        <div className="flex justify-center gap-4 mb-16">
+        <div className="flex justify-center gap-3 sm:gap-4 mb-10 sm:mb-16">
           {['male', 'female'].map(g => (
             <button 
               key={g} 
               onClick={() => setSelectedGender(g)} 
-              className={`px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest transition-all flex items-center gap-3 ${selectedGender === g ? 'bg-primary text-white shadow-xl shadow-primary/20 scale-105' : 'bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 text-gray-400'}`}
+              className={`px-6 sm:px-10 py-3 sm:py-4 rounded-2xl font-black uppercase text-xs tracking-widest transition-all flex items-center gap-2 sm:gap-3 ${selectedGender === g ? 'bg-primary text-white shadow-xl shadow-primary/20 scale-105' : 'bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 text-gray-400'}`}
             >
               <FiUser /> {g}
             </button>
@@ -186,18 +186,18 @@ const Occasion = () => {
         </div>
 
         {/* Occasion Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mb-12 sm:mb-20">
           {Object.entries(occasionLogic).map(([key, data]) => (
             <motion.div 
               key={key}
-              whileHover={{ y: -10 }}
+              whileHover={{ y: -6 }}
               onClick={() => setSelectedOccasion(key)}
-              className={`cursor-pointer p-10 rounded-[3rem] border-2 transition-all relative overflow-hidden group ${selectedOccasion === key ? 'border-primary bg-primary/5 shadow-2xl shadow-primary/10' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800 hover:border-primary/30'}`}
+              className={`cursor-pointer p-6 sm:p-10 rounded-3xl sm:rounded-[3rem] border-2 transition-all relative overflow-hidden group ${selectedOccasion === key ? 'border-primary bg-primary/5 shadow-2xl shadow-primary/10' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800 hover:border-primary/30'}`}
             >
-              <div className={`w-16 h-16 rounded-3xl flex items-center justify-center text-2xl mb-8 transition-colors ${selectedOccasion === key ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 group-hover:text-primary'}`}>
+              <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center text-xl sm:text-2xl mb-6 sm:mb-8 transition-colors ${selectedOccasion === key ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-400 group-hover:text-primary'}`}>
                 {data.icon}
               </div>
-              <h3 className="text-2xl font-black uppercase tracking-tight mb-4">{data.title}</h3>
+              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight mb-4">{data.title}</h3>
               
               {/* Mini Palette Preview */}
               <div className="flex gap-2">
@@ -220,30 +220,30 @@ const Occasion = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="grid lg:grid-cols-12 gap-12 items-stretch"
+              className="grid lg:grid-cols-12 gap-6 sm:gap-12 items-stretch"
             >
               {/* Left: The Visual Card */}
               <div className="lg:col-span-5">
-                <div className="bg-black text-white p-12 rounded-[4rem] h-full shadow-2xl relative overflow-hidden">
+                <div className="bg-black text-white p-6 sm:p-12 rounded-3xl sm:rounded-[4rem] h-full shadow-2xl relative overflow-hidden">
                   <div className="relative z-10 flex flex-col h-full justify-between">
                     <div>
                         <span className="text-primary font-black uppercase text-[10px] tracking-[0.3em] mb-4 block">Blueprint Active</span>
-                        <h2 className="text-5xl font-black tracking-tighter uppercase mb-10 leading-tight">{occasionLogic[selectedOccasion].title}</h2>
+                        <h2 className="text-3xl sm:text-5xl font-black tracking-tighter uppercase mb-6 sm:mb-10 leading-tight">{occasionLogic[selectedOccasion].title}</h2>
                         
-                        <div className="space-y-10">
+                        <div className="space-y-6 sm:space-y-10">
                             <div>
-                                <span className="text-[10px] font-black uppercase opacity-40 tracking-widest block mb-4">Recommended Look</span>
-                                <p className="text-3xl font-black text-primary leading-tight uppercase">{occasionLogic[selectedOccasion][selectedGender].look}</p>
+                                <span className="text-[10px] font-black uppercase opacity-40 tracking-widest block mb-2 sm:mb-4">Recommended Look</span>
+                                <p className="text-xl sm:text-3xl font-black text-primary leading-tight uppercase">{occasionLogic[selectedOccasion][selectedGender].look}</p>
                             </div>
 
                             {/* OCCASION COLOR PALETTE */}
                             <div>
-                                <span className="text-[10px] font-black uppercase opacity-40 tracking-widest block mb-4 flex items-center gap-2"><FiDroplet /> Recommended Palette</span>
-                                <div className="flex gap-4">
+                                <span className="text-[10px] font-black uppercase opacity-40 tracking-widest block mb-3 sm:mb-4 flex items-center gap-2"><FiDroplet /> Recommended Palette</span>
+                                <div className="flex gap-3 sm:gap-4">
                                     {occasionLogic[selectedOccasion].colors.map(c => (
-                                        <div key={c.hex} className="flex flex-col items-center gap-2">
-                                            <div className="w-12 h-12 rounded-full border-2 border-white/20 shadow-lg" style={{ backgroundColor: c.hex }} />
-                                            <span className="text-[8px] font-black uppercase opacity-60">{c.name}</span>
+                                        <div key={c.hex} className="flex flex-col items-center gap-1.5 sm:gap-2">
+                                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white/20 shadow-lg" style={{ backgroundColor: c.hex }} />
+                                            <span className="text-[8px] font-black uppercase opacity-60 text-center">{c.name}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -251,45 +251,45 @@ const Occasion = () => {
 
                             <div>
                                 <span className="text-[10px] font-black uppercase opacity-40 tracking-widest block mb-2">The Mood</span>
-                                <p className="text-lg font-bold italic opacity-90">"{occasionLogic[selectedOccasion][selectedGender].mood}"</p>
+                                <p className="text-base sm:text-lg font-bold italic opacity-90">"{occasionLogic[selectedOccasion][selectedGender].mood}"</p>
                             </div>
                         </div>
                     </div>
-                    <FiAward size={100} className="text-primary opacity-20 mt-12" />
+                    <FiAward size={80} className="text-primary opacity-20 mt-8 sm:mt-12" />
                   </div>
-                  <div className="absolute top-0 right-0 p-10 opacity-10">
-                    {React.cloneElement(occasionLogic[selectedOccasion].icon, { size: 200 })}
+                  <div className="absolute top-0 right-0 p-6 sm:p-10 opacity-10">
+                    {React.cloneElement(occasionLogic[selectedOccasion].icon, { size: 160 })}
                   </div>
                 </div>
               </div>
 
               {/* Right: The Breakdown */}
-              <div className="lg:col-span-7 space-y-8">
-                <div className="bg-white dark:bg-gray-900 p-12 rounded-[4rem] border border-gray-100 dark:border-gray-800 shadow-xl">
-                    <div className="flex items-center gap-3 mb-10">
+              <div className="lg:col-span-7 space-y-6 sm:space-y-8">
+                <div className="bg-white dark:bg-gray-900 p-6 sm:p-12 rounded-3xl sm:rounded-[4rem] border border-gray-100 dark:border-gray-800 shadow-xl">
+                    <div className="flex items-center gap-3 mb-6 sm:mb-10">
                         <FiBox className="text-primary" />
                         <h4 className="font-black uppercase text-xs tracking-widest">The Outfit Formula</h4>
                     </div>
-                    <div className="p-10 bg-gray-50 dark:bg-gray-800/50 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 mb-10">
-                        <p className="text-2xl font-black leading-tight text-text dark:text-darkText uppercase tracking-tight">
+                    <div className="p-5 sm:p-10 bg-gray-50 dark:bg-gray-800/50 rounded-2xl sm:rounded-[2.5rem] border border-gray-100 dark:border-gray-800 mb-6 sm:mb-10">
+                        <p className="text-lg sm:text-2xl font-black leading-tight text-text dark:text-darkText uppercase tracking-tight">
                             {occasionLogic[selectedOccasion][selectedGender].formula}
                         </p>
                     </div>
                     
-                    <div className="flex items-start gap-6 bg-primary/5 p-8 rounded-[2rem] border border-primary/10">
-                        <div className="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="flex items-start gap-4 sm:gap-6 bg-primary/5 p-4 sm:p-8 rounded-2xl sm:rounded-[2rem] border border-primary/10">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary text-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
                             <FiZap />
                         </div>
                         <div>
-                            <h5 className="font-black uppercase text-[10px] tracking-widest text-primary mb-2">Stylist Pro-Tip</h5>
-                            <p className="text-sm font-bold leading-relaxed opacity-80">{occasionLogic[selectedOccasion][selectedGender].tip}</p>
+                            <h5 className="font-black uppercase text-[10px] tracking-widest text-primary mb-1.5 sm:mb-2">Stylist Pro-Tip</h5>
+                            <p className="text-xs sm:text-sm font-bold leading-relaxed opacity-80">{occasionLogic[selectedOccasion][selectedGender].tip}</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex gap-6">
-                    <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex-1 py-6 bg-gray-100 dark:bg-gray-800 rounded-3xl font-black uppercase text-xs tracking-widest hover:bg-primary hover:text-white transition-all">Try Another Event</button>
-                    <button onClick={saveReport} disabled={isSaved} className={`flex-1 py-6 rounded-3xl font-black uppercase text-xs tracking-widest hover:shadow-2xl transition-all flex items-center justify-center gap-3 ${isSaved ? 'bg-green-500 text-white shadow-lg' : 'bg-primary text-white hover:shadow-primary/30 shadow-primary/20'}`}>
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
+                    <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex-1 py-4 sm:py-6 bg-gray-100 dark:bg-gray-800 rounded-2xl sm:rounded-3xl font-black uppercase text-xs tracking-widest hover:bg-primary hover:text-white transition-all text-center">Try Another Event</button>
+                    <button onClick={saveReport} disabled={isSaved} className={`flex-1 py-4 sm:py-6 rounded-2xl sm:rounded-3xl font-black uppercase text-xs tracking-widest hover:shadow-2xl transition-all flex items-center justify-center gap-3 ${isSaved ? 'bg-green-500 text-white shadow-lg' : 'bg-primary text-white hover:shadow-primary/30 shadow-primary/20'}`}>
                         {isSaved ? <FiCheck className="animate-pulse" /> : <FiSave />} {isSaved ? 'Saved Report!' : 'Save Report'}
                     </button>
                 </div>

@@ -141,80 +141,80 @@ const BodyType = () => {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12">
           {/* Input Section */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8"
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-5 sm:p-8"
           >
-            <h2 className="text-2xl font-bold mb-6">Enter Your Measurements</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Enter Your Measurements</h2>
             
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6">
               <div>
-                <label className="block text-sm font-medium mb-2">Height (cm)</label>
+                <label className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">Height (cm)</label>
                 <input
                   type="number"
                   name="height"
                   value={measurements.height}
                   onChange={handleInputChange}
                   placeholder="170"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary bg-white dark:bg-gray-700"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary bg-white dark:bg-gray-700"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Weight (kg)</label>
+                <label className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">Weight (kg)</label>
                 <input
                   type="number"
                   name="weight"
                   value={measurements.weight}
                   onChange={handleInputChange}
                   placeholder="70"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary bg-white dark:bg-gray-700"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary bg-white dark:bg-gray-700"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Bust (cm)</label>
+                <label className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">Bust (cm)</label>
                 <input
                   type="number"
                   name="bust"
                   value={measurements.bust}
                   onChange={handleInputChange}
                   placeholder="90"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary bg-white dark:bg-gray-700"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary bg-white dark:bg-gray-700"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Waist (cm)</label>
+                <label className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">Waist (cm)</label>
                 <input
                   type="number"
                   name="waist"
                   value={measurements.waist}
                   onChange={handleInputChange}
                   placeholder="75"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary bg-white dark:bg-gray-700"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary bg-white dark:bg-gray-700"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Hips (cm)</label>
+                <label className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">Hips (cm)</label>
                 <input
                   type="number"
                   name="hips"
                   value={measurements.hips}
                   onChange={handleInputChange}
                   placeholder="95"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary bg-white dark:bg-gray-700"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary bg-white dark:bg-gray-700"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Shoulders (cm)</label>
+                <label className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">Shoulders (cm)</label>
                 <input
                   type="number"
                   name="shoulders"
                   value={measurements.shoulders}
                   onChange={handleInputChange}
                   placeholder="40"
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary bg-white dark:bg-gray-700"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary bg-white dark:bg-gray-700"
                 />
               </div>
             </div>
@@ -222,7 +222,7 @@ const BodyType = () => {
             <button
               onClick={analyzeBodyType}
               disabled={analyzing}
-              className="w-full flex items-center justify-center space-x-2 bg-primary text-white py-4 rounded-lg hover:bg-opacity-90 transition-colors disabled:opacity-50"
+              className="w-full flex items-center justify-center space-x-2 bg-primary text-white py-3.5 sm:py-4 rounded-xl font-bold hover:bg-opacity-90 transition-colors disabled:opacity-50 text-sm sm:text-base"
             >
               {analyzing ? (
                 <>
@@ -238,16 +238,16 @@ const BodyType = () => {
             </button>
 
             {/* Manual Selection */}
-            <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
-              <h3 className="font-semibold mb-4">Or select your body type manually:</h3>
+            <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700">
+              <h3 className="font-semibold text-sm sm:text-base mb-3 sm:mb-4">Or select your body type manually:</h3>
               <div className="space-y-2">
                 {bodyTypes.map((type) => (
                   <button
                     key={type.id}
                     onClick={() => selectBodyType(type)}
-                    className={`w-full text-left px-4 py-3 rounded-lg border transition-all ${
+                    className={`w-full text-left px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border text-sm transition-all ${
                       result?.id === type.id
-                        ? 'border-primary bg-primary/10 text-primary'
+                        ? 'border-primary bg-primary/10 text-primary font-bold'
                         : 'border-gray-200 dark:border-gray-600 hover:border-primary'
                     }`}
                   >
@@ -262,38 +262,38 @@ const BodyType = () => {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8"
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-5 sm:p-8"
           >
-            <h2 className="text-2xl font-bold mb-6">Your Body Type</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Your Body Type</h2>
 
             {analyzing ? (
               <div className="flex flex-col items-center justify-center py-12">
-                <div className="w-24 h-24 relative mb-6">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 relative mb-6">
                   <div className="absolute inset-0 border-4 border-secondary/20 rounded-full" />
                   <div className="absolute inset-0 border-4 border-secondary rounded-full border-t-transparent animate-spin" />
                 </div>
-                <p className="text-lg font-medium mb-2">Analyzing your body type...</p>
-                <p className="text-sm text-gray-500">This may take a few seconds</p>
+                <p className="text-base sm:text-lg font-medium mb-1">Analyzing your body type...</p>
+                <p className="text-xs sm:text-sm text-gray-500">This may take a few seconds</p>
               </div>
             ) : result ? (
               <div>
                 {/* Body Type Info */}
                 <div className="text-center mb-8">
-                  <div className="w-32 h-32 mx-auto bg-secondary/10 rounded-full flex items-center justify-center mb-4">
-                    <FiUser className="w-16 h-16 text-secondary" />
+                  <div className="w-24 h-24 sm:w-32 sm:h-32 mx-auto bg-secondary/10 rounded-full flex items-center justify-center mb-4">
+                    <FiUser className="w-12 h-12 sm:w-16 sm:h-16 text-secondary" />
                   </div>
-                  <h3 className="text-2xl font-bold">{result.name}</h3>
-                  <p className="text-gray-500 mt-2">{result.description}</p>
+                  <h3 className="text-xl sm:text-2xl font-bold">{result.name}</h3>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-2">{result.description}</p>
                 </div>
 
                 {/* Characteristics */}
                 <div className="mb-6">
-                  <h4 className="font-semibold mb-3">Your Characteristics</h4>
+                  <h4 className="font-semibold text-sm sm:text-base mb-3">Your Characteristics</h4>
                   <div className="flex flex-wrap gap-2">
                     {result.characteristics.map((char, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-sm"
+                        className="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-xs sm:text-sm"
                       >
                         {char}
                       </span>
@@ -303,12 +303,12 @@ const BodyType = () => {
 
                 {/* Recommendations */}
                 <div className="mb-6">
-                  <h4 className="font-semibold mb-3">Recommended Styles</h4>
+                  <h4 className="font-semibold text-sm sm:text-base mb-3">Recommended Styles</h4>
                   <div className="flex flex-wrap gap-2">
                     {result.recommendations.map((rec, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-full text-sm"
+                        className="px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-full text-xs sm:text-sm"
                       >
                         {rec}
                       </span>
@@ -318,12 +318,12 @@ const BodyType = () => {
 
                 {/* What to Avoid */}
                 <div className="mb-8">
-                  <h4 className="font-semibold mb-3">What to Avoid</h4>
+                  <h4 className="font-semibold text-sm sm:text-base mb-3">What to Avoid</h4>
                   <div className="flex flex-wrap gap-2">
                     {result.avoid.map((item, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-full text-sm"
+                        className="px-3 py-1 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-full text-xs sm:text-sm"
                       >
                         {item}
                       </span>
@@ -332,12 +332,12 @@ const BodyType = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex space-x-4">
-                <button onClick={saveReport} disabled={isSaved} className={`flex-1 flex items-center justify-center space-x-2 py-3 rounded-lg font-black uppercase text-xs tracking-widest transition-all ${isSaved ? 'bg-green-500 text-white shadow-lg' : 'bg-primary text-white hover:shadow-lg hover:scale-105 shadow-primary/20'}`}>
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <button onClick={saveReport} disabled={isSaved} className={`flex-1 flex items-center justify-center space-x-2 py-3.5 rounded-xl font-black uppercase text-xs tracking-widest transition-all ${isSaved ? 'bg-green-500 text-white shadow-lg' : 'bg-primary text-white hover:shadow-lg hover:scale-105 shadow-primary/20'}`}>
                   {isSaved ? <FiCheck className="animate-pulse" /> : <FiSave />}
                   <span>{isSaved ? 'Saved!' : 'Save Report'}</span>
                 </button>
-                  <button className="flex-1 flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 py-3 rounded-lg hover:border-secondary transition-colors">
+                  <button className="flex-1 flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider hover:border-secondary transition-colors">
                     <FiDownload />
                     <span>Download Report</span>
                   </button>

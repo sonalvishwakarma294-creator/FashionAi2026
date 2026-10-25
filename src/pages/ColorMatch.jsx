@@ -70,15 +70,15 @@ const ColorMatch = () => {
         <motion.div 
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-widest mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-widest mb-4 sm:mb-6">
             <FiStar /> AI Style Assistant
           </div>
-          <h1 className="text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-6 tracking-tight">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-4 sm:mb-6 tracking-tight">
             Color <span className="text-emerald-500 underline decoration-emerald-200 underline-offset-8">Harmony</span>
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Master the art of color matching. Choose any color and our AI will generate professional palettes based on classic color theory.
           </p>
         </motion.div>
@@ -91,30 +91,30 @@ const ColorMatch = () => {
             animate={{ opacity: 1, x: 0 }}
             className="lg:col-span-5 space-y-6"
           >
-            <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 shadow-sm border border-gray-100 dark:border-gray-800">
-              <h2 className="text-xl font-bold mb-8 flex items-center gap-3 text-gray-900 dark:text-white">
+            <div className="bg-white dark:bg-gray-900 rounded-3xl sm:rounded-[2.5rem] p-5 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-800">
+              <h2 className="text-lg sm:text-xl font-bold mb-6 sm:mb-8 flex items-center gap-3 text-gray-900 dark:text-white">
                 <IoColorPaletteOutline className="text-emerald-500" size={24} />
                 Pick Your Base Color
               </h2>
 
               {/* Color Picker Section */}
-              <div className="mb-10 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-3xl border border-gray-100 dark:border-gray-700">
-                <div className="flex items-center gap-6">
+              <div className="mb-6 sm:mb-10 p-4 sm:p-6 bg-gray-50 dark:bg-gray-800/50 rounded-2xl sm:rounded-3xl border border-gray-100 dark:border-gray-700">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-center sm:text-left">
                   <div className="relative group">
                     <input 
                       type="color" 
                       value={selectedColor}
                       onChange={(e) => setSelectedColor(e.target.value)}
-                      className="w-24 h-24 rounded-2xl cursor-pointer border-4 border-white dark:border-gray-700 shadow-xl"
+                      className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl cursor-pointer border-4 border-white dark:border-gray-700 shadow-xl"
                     />
                     <div className="absolute -bottom-2 -right-2 bg-emerald-500 text-white p-1.5 rounded-lg shadow-lg">
                       <FiSearch size={14} />
                     </div>
                   </div>
                   <div className="flex-1">
-                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 mb-2 block">Selected Hex</label>
-                    <div className="flex items-center gap-2">
-                      <code className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 mb-1.5 block">Selected Hex</label>
+                    <div className="flex items-center justify-center sm:justify-start gap-2">
+                      <code className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">
                         {selectedColor}
                       </code>
                       <button 
@@ -129,18 +129,18 @@ const ColorMatch = () => {
               </div>
 
               {/* Presets */}
-              <div className="mb-10">
-                <label className="text-xs font-black uppercase tracking-widest text-gray-400 mb-6 block">Popular Fashion Colors</label>
-                <div className="grid grid-cols-5 gap-4">
+              <div className="mb-6 sm:mb-10">
+                <label className="text-xs font-black uppercase tracking-widest text-gray-400 mb-4 sm:mb-6 block">Popular Fashion Colors</label>
+                <div className="grid grid-cols-5 gap-2.5 sm:gap-4">
                   {fashionColors.map((color) => (
                     <motion.button
                       key={color.name}
                       whileHover={{ scale: 1.1, y: -2 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={() => setSelectedColor(color.hex)}
-                      className={`h-12 rounded-xl transition-all relative ${
+                      className={`h-10 sm:h-12 rounded-xl transition-all relative ${
                         selectedColor.toLowerCase() === color.hex.toLowerCase() 
-                        ? 'ring-4 ring-emerald-500 ring-offset-4 dark:ring-offset-gray-900' 
+                        ? 'ring-4 ring-emerald-500 ring-offset-2 sm:ring-offset-4 dark:ring-offset-gray-900' 
                         : 'hover:shadow-lg'
                       }`}
                       style={{ backgroundColor: color.hex }}
@@ -161,7 +161,7 @@ const ColorMatch = () => {
                 whileTap={{ scale: 0.98 }}
                 onClick={() => analyzeColor()}
                 disabled={loading}
-                className="w-full py-5 px-8 bg-gray-900 dark:bg-emerald-600 text-white rounded-2xl font-black text-lg uppercase tracking-widest shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                className="w-full py-4 sm:py-5 px-6 sm:px-8 bg-gray-900 dark:bg-emerald-600 text-white rounded-2xl font-black text-sm sm:text-base uppercase tracking-widest shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-3 disabled:opacity-50"
               >
                 {loading ? 'Analyzing...' : 'Generate Palettes'}
                 {!loading && <FiArrowRight />}
@@ -169,11 +169,11 @@ const ColorMatch = () => {
             </div>
 
             {/* Quick Tips */}
-            <div className="bg-emerald-500 text-white rounded-[2.5rem] p-8 shadow-lg shadow-emerald-500/20">
-              <h3 className="text-lg font-black mb-4 flex items-center gap-2">
+            <div className="bg-emerald-500 text-white rounded-3xl sm:rounded-[2.5rem] p-5 sm:p-8 shadow-lg shadow-emerald-500/20">
+              <h3 className="text-base sm:text-lg font-black mb-2 sm:mb-4 flex items-center gap-2">
                 <FiInfo /> Pro Tip
               </h3>
-              <p className="text-emerald-50 text-sm leading-relaxed font-medium">
+              <p className="text-emerald-50 text-xs sm:text-sm leading-relaxed font-medium">
                 For a balanced look, follow the <span className="font-bold">60-30-10 rule</span>: 60% dominant color, 30% secondary color, and 10% accent color.
               </p>
             </div>
@@ -194,26 +194,28 @@ const ColorMatch = () => {
                   exit={{ opacity: 0, scale: 0.95 }}
                   className="space-y-6"
                 >
-                  <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-10 shadow-sm border border-gray-100 dark:border-gray-800">
-                    <div className="flex justify-between items-end mb-12">
+                  <div className="bg-white dark:bg-gray-900 rounded-3xl sm:rounded-[2.5rem] p-5 sm:p-10 shadow-sm border border-gray-100 dark:border-gray-800">
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-12">
                       <div>
                         <h3 className="text-xs font-black uppercase tracking-[0.2em] text-emerald-500 mb-2">Results for</h3>
-                        <div className="text-4xl font-black text-gray-900 dark:text-white flex items-center gap-4">
+                        <div className="text-2xl sm:text-4xl font-black text-gray-900 dark:text-white flex items-center gap-3 sm:gap-4">
                           {colorName}
-                          <div className="w-8 h-8 rounded-full border-4 border-gray-100 dark:border-gray-800" style={{ backgroundColor: selectedColor }} />
+                          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border-4 border-gray-100 dark:border-gray-800" style={{ backgroundColor: selectedColor }} />
                         </div>
                       </div>
                       <button 
                         onClick={() => copyToClipboard(JSON.stringify(result), 'all')}
-                        className="flex items-center gap-2 px-6 py-3 bg-gray-100 dark:bg-gray-800 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gray-200 transition-colors"
+                        className="flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 bg-gray-100 dark:bg-gray-800 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-gray-200 transition-colors w-full sm:w-auto"
                       >
                         {copied === 'all' ? <FiCheck className="text-emerald-500" /> : <FiCopy />}
                         {copied === 'all' ? 'Copied' : 'Copy All'}
                       </button>
                     </div>
 
-                    <div className="grid sm:grid-cols-2 gap-8">
-                      {Object.entries(result).map(([harmony, colors], idx) => (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+                      {Object.entries(result)
+                        .filter(([k, v]) => Array.isArray(v))
+                        .map(([harmony, colors], idx) => (
                         <motion.div 
                           key={harmony}
                           initial={{ opacity: 0, y: 20 }}
@@ -225,43 +227,54 @@ const ColorMatch = () => {
                             <h4 className="text-xs font-black uppercase tracking-widest text-gray-400">{harmony}</h4>
                             <span className="w-8 h-px bg-gray-100 dark:bg-gray-800 flex-1 mx-4" />
                           </div>
-                          <div className="flex gap-3">
-                            {colors.map((color, cIdx) => (
+                          <div className="flex gap-2 sm:gap-3">
+                            {colors.map((colorObj, cIdx) => {
+                              const hex = colorObj.hex || getColorHex(colorObj.name || colorObj);
+                              const name = colorObj.name || colorObj;
+                              const explanation = colorObj.explanation || '';
+                              
+                              return (
                               <motion.div
                                 key={cIdx}
                                 whileHover={{ y: -5 }}
                                 className="group relative flex-1"
+                                title={explanation}
                               >
                                 <div 
-                                  className="h-24 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 cursor-pointer flex items-center justify-center overflow-hidden"
-                                  style={{ backgroundColor: getColorHex(color) }}
-                                  onClick={() => copyToClipboard(color, color)}
+                                  className="h-16 sm:h-24 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 cursor-pointer flex items-center justify-center overflow-hidden"
+                                  style={{ backgroundColor: hex }}
+                                  onClick={() => copyToClipboard(hex, name)}
                                 >
                                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-                                    {copied === color ? <FiCheck size={24} /> : <FiCopy size={20} />}
+                                    {copied === name ? <FiCheck size={20} /> : <FiCopy size={16} />}
                                   </div>
                                 </div>
-                                <span className="block mt-2 text-[10px] font-black uppercase tracking-tighter text-gray-500 text-center truncate">
-                                  {color}
+                                <span className="block mt-1 sm:mt-2 text-[10px] font-black uppercase tracking-tighter text-gray-500 text-center truncate">
+                                  {name}
                                 </span>
                               </motion.div>
-                            ))}
+                            )})}
                           </div>
+                          {result.notes && result.notes[harmony] && (
+                            <p className="text-[11px] text-gray-500 mt-2 leading-relaxed">
+                              {result.notes[harmony]}
+                            </p>
+                          )}
                         </motion.div>
                       ))}
                     </div>
                   </div>
 
                   {/* Recommendation Card */}
-                  <div className="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-emerald-900/20 dark:to-gray-900 rounded-[2.5rem] p-10 text-white">
-                    <div className="flex items-start gap-6">
-                      <div className="w-16 h-16 rounded-2xl bg-emerald-500 flex items-center justify-center flex-shrink-0">
-                        <FiTrendingUp size={32} />
+                  <div className="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-emerald-900/20 dark:to-gray-900 rounded-3xl sm:rounded-[2.5rem] p-5 sm:p-10 text-white">
+                    <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-emerald-500 flex items-center justify-center flex-shrink-0">
+                        <FiTrendingUp className="w-6 h-6 sm:w-8 sm:h-8" />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-black mb-2 tracking-tight">Stylist's Recommendation</h3>
-                        <p className="text-gray-400 leading-relaxed font-medium">
-                          Based on {colorName}, we recommend using <span className="text-white font-bold">{result.complementary[0]}</span> as your main accessory color for high-impact events, or <span className="text-white font-bold">{result.analogous[0]}</span> for a sophisticated, professional vibe.
+                        <h3 className="text-xl sm:text-2xl font-black mb-2 tracking-tight">Stylist's Recommendation</h3>
+                        <p className="text-gray-400 text-xs sm:text-sm leading-relaxed font-medium">
+                          Based on {colorName}, we recommend using <span className="text-white font-bold">{result.complementary?.[0]?.name || result.complementary?.[0] || 'Gold'}</span> as your main accessory color for high-impact events, or <span className="text-white font-bold">{result.analogous?.[0]?.name || result.analogous?.[0] || 'Silver'}</span> for a sophisticated, professional vibe.
                         </p>
                       </div>
                     </div>

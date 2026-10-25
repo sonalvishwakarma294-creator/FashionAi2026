@@ -14,6 +14,6 @@ test('renders brand and social links', () => {
   render(<BrowserRouter><Footer /></BrowserRouter>);
   expect(screen.getByText('Fashion')).toBeDefined();
   expect(screen.getByText('AI Studio')).toBeDefined();
-  expect(screen.getByRole('link', { name: /instagram/i })).toBeDefined();
+  expect(screen.getByLabelText('Instagram')).toBeDefined();
 });
 

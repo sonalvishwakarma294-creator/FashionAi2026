@@ -3,13 +3,19 @@ import { beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 
 // Mock IntersectionObserver for framer-motion
-const IntersectionObserverMock = vi.fn(() => ({
-  disconnect: vi.fn(),
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-}));
+class IntersectionObserverMock {
+  constructor(callback, options) {
+    this.callback = callback;
+    this.options = options;
+  }
+  disconnect = vi.fn();
+  observe = vi.fn();
+  unobserve = vi.fn();
+  takeRecords = vi.fn(() => []);
+}
 
 window.IntersectionObserver = IntersectionObserverMock;
+global.IntersectionObserver = IntersectionObserverMock;
 
 // Mock localStorage
 Object.defineProperty(window, 'localStorage', {

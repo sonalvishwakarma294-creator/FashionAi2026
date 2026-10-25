@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 // Auth
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Components
 import Navbar from './components/Navbar';
@@ -21,14 +22,14 @@ import ImageUpload from './pages/ImageUpload';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import ResetPassword from './pages/ResetPassword';
 import Admin from './pages/Admin';
 import OutfitDetail from './pages/OutfitDetail';
-import AccessoryMatch from './pages/AccessoryMatch';
+import ColorMatch from './pages/ColorMatch';
 import About from './pages/About';
 import Careers from './pages/Careers';
 import Press from './pages/Press';
 import Blog from './pages/Blog';
-import ColorMatch from './pages/ColorMatch';
 import Feedback from './pages/Feedback';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
@@ -36,6 +37,7 @@ import Cookies from './pages/Cookies';
 import Help from './pages/Help';
 import Contact from './pages/Contact';
 import DigitalCloset from './pages/DigitalCloset';
+import NotFound from './pages/NotFound';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -62,7 +64,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background dark:bg-darkBackground text-text dark:text-darkText transition-colors duration-300">
+    <div className="min-h-screen bg-background dark:bg-darkBackground text-text dark:text-darkText transition-colors duration-300 overflow-x-hidden w-full relative">
       <Navbar scrolled={scrolled} darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <AnimatePresence mode="wait">
         <Routes>
@@ -72,16 +74,18 @@ function App() {
           <Route path="/skintone" element={<SkinTone />} />
           <Route path="/skin-tone" element={<SkinTone />} />
           <Route path="/body-type" element={<BodyType />} />
+          <Route path="/bodytype" element={<BodyType />} />
           <Route path="/occasion" element={<Occasion />} />
           <Route path="/image-upload" element={<ImageUpload />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/admin" element={<ProtectedRoute adminOnly={true}><Admin /></ProtectedRoute>} />
           <Route path="/outfit/:id" element={<OutfitDetail />} />
-          <Route path="/closet" element={<DigitalCloset />} />
-          <Route path="/accessory-match" element={<AccessoryMatch />} />
+          <Route path="/closet" element={<ProtectedRoute><DigitalCloset /></ProtectedRoute>} />
           <Route path="/color-match" element={<ColorMatch />} />
+          <Route path="/accessory-match" element={<ColorMatch />} />
           <Route path="/about" element={<About />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/press" element={<Press />} />
@@ -92,6 +96,7 @@ function App() {
           <Route path="/cookies" element={<Cookies />} />
           <Route path="/help" element={<Help />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AnimatePresence>
       <Footer />
