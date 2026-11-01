@@ -521,6 +521,14 @@ const Footer = () => {
           </div>
         </div>
 
+        {/* Research & Project Disclaimer Notice */}
+        <div className="my-6 p-4 rounded-2xl bg-white/[0.03] border border-white/5 text-center">
+          <p className="text-[11px] text-gray-400 leading-relaxed max-w-4xl mx-auto">
+            <span className="text-gray-300 font-bold uppercase tracking-wider text-[10px] mr-1.5 px-2 py-0.5 rounded bg-white/10">Project Notice</span>
+            Fashion Pro AI is a research and educational project combining computer vision and algorithmic color theory. Because lighting and personal aesthetics vary, recommendations are creative suggestions for style inspiration, not absolute rules.
+          </p>
+        </div>
+
         {/* Bottom Bar: Copyright, Legal & Back to Top */}
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-gray-400">
           <p className="text-center md:text-left">

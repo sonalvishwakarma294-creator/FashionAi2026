@@ -144,5 +144,16 @@ npm run build
 
 ---
 
+## ⚠️ Research Disclaimer & Project Notice
+
+> **Note:** **Fashion Pro AI** is an academic and research-driven software project created to demonstrate the application of Computer Vision and algorithmic color theory in personal styling.
+> 
+> * **Algorithmic Foundation:** The styling recommendations, color pairings, and silhouette rules are implemented based on established color theory (CIEDE2000, seasonal palettes, and HSL harmony matrices) and machine learning heuristics.
+> * **Subjectivity of Fashion:** Fashion, style, and aesthetics are inherently personal, subjective, and culturally diverse.
+> * **Technical Limitations:** Camera lighting, angle, and monitor color spaces can influence image analysis (such as skin tone and garment color detection).
+> * **Guidance Only:** All outputs from this application are designed as creative style inspirations and experimental guides, not definitive or absolute fashion advice.
+
+---
+
 ## 📄 License
 This project is open-source and available under the [MIT License](LICENSE).

@@ -158,7 +158,7 @@ def like_outfit():
     except Exception as e:
         db.session.rollback()
         print(f"❌ DB commit failed: {e}")
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": "Failed to update like status. Please try again."}), 500
 
 
 @gallery_bp.route('/profile/liked', methods=['GET'])

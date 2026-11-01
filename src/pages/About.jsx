@@ -105,6 +105,28 @@ const About = () => {
           </div>
         </motion.section>
 
+        {/* Research & Styling Disclaimer Card */}
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="mt-16 p-8 bg-amber-500/10 border border-amber-500/20 rounded-3xl"
+        >
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-600 flex items-center justify-center font-bold text-xl shrink-0">
+              ℹ️
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 mb-1">
+                Project & Research Disclaimer
+              </h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Fashion Pro AI is a technology showcase combining computer vision (CIEDE2000, color extraction) and fashion harmony theory. Personal style, cultural context, and camera lighting all play a role in fashion perception. All suggestions are intended as creative styling guides rather than rigid rules.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
         <motion.section 
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -128,6 +150,7 @@ const About = () => {
             </button>
           </div>
         </motion.section>
+
       </motion.main>
     </div>
   );

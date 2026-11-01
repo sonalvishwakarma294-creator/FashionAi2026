@@ -1106,7 +1106,7 @@ def analyze_skin_tone():
     except Exception as e:
         import traceback
         traceback.print_exc()
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": "Failed to analyze skin tone. Please try again."}), 500
 
 @accessory_bp.route('/color-combinations', methods=['POST'])
 @accessory_bp.route('/color-match', methods=['POST'])
