@@ -143,6 +143,15 @@ def init_db(app):
                 ensure_closet_schema()
             except Exception as e:
                 print(f"[DB] Closet schema check warning: {e}")
+            try:
+                from models.outfit import Outfit
+                if Outfit.query.count() == 0:
+                    print('[DB] Outfits table is empty, auto-seeding gallery...')
+                    from seed_gallery import seed
+                    seed()
+                    print(f'[DB] Auto-seed complete. Total outfits: {Outfit.query.count()}')
+            except Exception as e:
+                print(f'[DB] Auto-seed warning: {e}')
         except Exception as e:
             print(f"[DB] create_all failed: {type(e).__name__}: {e}")
             print("[DB] Check credentials, permissions and MySQL server status.")

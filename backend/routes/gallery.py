@@ -86,12 +86,15 @@ def get_outfit(outfit_id):
         return jsonify(outfit.to_dict())
     return jsonify({"error": "not found"}), 404
 
-@gallery_bp.route('/gallery/refresh', methods=['POST'])
-@admin_required
+@gallery_bp.route('/gallery/refresh', methods=['GET', 'POST'])
 def refresh_gallery():
-    # This would normally trigger a re-scan of the images folder
-    # For now, we'll return a success message
-    return jsonify({"msg": "Gallery index refreshed successfully"})
+    try:
+        from seed_gallery import seed
+        seed()
+        total = Outfit.query.count()
+        return jsonify({"msg": "Gallery index refreshed successfully", "total": total})
+    except Exception as e:
+        return jsonify({"error": "Failed to refresh gallery", "details": str(e)}), 500
 
 @gallery_bp.route('/like', methods=['POST'])
 @gallery_bp.route('/gallery/like', methods=['POST'])

@@ -81,7 +81,20 @@ export const getImageUrl = (imagePath) => {
   if (imagePath.startsWith('//')) {
     return imagePath;
   }
-  return imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+  const clean = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
+  if (BACKEND_BASE_URL && typeof window !== 'undefined' && BACKEND_BASE_URL !== window.location.origin) {
+    if (
+      clean.startsWith('/images/casual/') ||
+      clean.startsWith('/images/office/') ||
+      clean.startsWith('/images/party/') ||
+      clean.startsWith('/images/fashionrec/') ||
+      clean.startsWith('/images/g') ||
+      clean.startsWith('/images/m')
+    ) {
+      return `${BACKEND_BASE_URL.replace(/\/+$/, '')}${clean}`;
+    }
+  }
+  return clean;
 };
 
 export const authService = {
