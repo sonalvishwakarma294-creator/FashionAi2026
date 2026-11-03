@@ -156,7 +156,7 @@ const Signup = () => {
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        placeholder="••••"
+                        placeholder="e.g. Fashion@123"
                         required
                         className="w-full pl-12 sm:pl-14 pr-12 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-xl sm:rounded-2xl focus:border-secondary transition-all text-white font-bold outline-none text-xs sm:text-sm"
                         />
@@ -171,13 +171,14 @@ const Signup = () => {
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleChange}
-                        placeholder="••••"
+                        placeholder="e.g. Fashion@123"
                         required
                         className="w-full pl-12 sm:pl-14 pr-4 sm:pr-6 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-xl sm:rounded-2xl focus:border-secondary transition-all text-white font-bold outline-none text-xs sm:text-sm"
                         />
                     </div>
                 </div>
             </div>
+            <p className="text-[10px] text-white/30 ml-3 sm:ml-4">Security Requirement: Min. 8 characters with at least 1 uppercase letter and 1 number (e.g. Fashion@123)</p>
 
             <label className="flex items-center space-x-3 cursor-pointer ml-3 sm:ml-4">
               <input

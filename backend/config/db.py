@@ -150,6 +150,38 @@ def init_db(app):
                     from seed_gallery import seed
                     seed()
                     print(f'[DB] Auto-seed complete. Total outfits: {Outfit.query.count()}')
+            try:
+                from models.user import User
+                import bcrypt
+                if not User.query.filter_by(email='admin@fashion.ai').first():
+                    admin_pw = bcrypt.hashpw('Admin@123'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+                    admin_u = User(
+                        name='Admin User',
+                        email='admin@fashion.ai',
+                        hashed_password=admin_pw,
+                        gender='other',
+                        member_since='March 2026',
+                        is_admin=True,
+                        role='admin'
+                    )
+                    db.session.add(admin_u)
+                if not User.query.filter_by(email='demo@fashion.ai').first():
+                    demo_pw = bcrypt.hashpw('Fashion@123'.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+                    demo_u = User(
+                        name='Demo User',
+                        email='demo@fashion.ai',
+                        hashed_password=demo_pw,
+                        gender='female',
+                        member_since='March 2026',
+                        is_admin=False,
+                        role='user'
+                    )
+                    db.session.add(demo_u)
+                db.session.commit()
+                print('[DB] Default users (admin & demo) verified.')
+            except Exception as ue:
+                db.session.rollback()
+                print(f'[DB] Default users seed warning: {ue}')
             except Exception as e:
                 print(f'[DB] Auto-seed warning: {e}')
         except Exception as e:

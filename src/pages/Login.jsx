@@ -110,6 +110,16 @@ import api from '../services/api';
           </form>
 
           <p className="text-center mt-8 sm:mt-12 text-[10px] font-black uppercase tracking-widest text-white/20">New Member? <Link to="/signup" className="text-primary hover:text-white transition-colors ml-2 underline underline-offset-4">Establish Identity</Link></p>
+
+          <div className="mt-4 pt-4 border-t border-white/10 text-center">
+            <button
+              type="button"
+              onClick={() => setFormData({ email: 'demo@fashion.ai', password: 'Fashion@123' })}
+              className="text-[10px] font-black uppercase tracking-widest text-primary/80 hover:text-primary transition-colors bg-primary/10 px-4 py-2 rounded-xl"
+            >
+              ⚡ Quick Fill Demo: demo@fashion.ai
+            </button>
+          </div>
         </motion.div>
       </div>
 
