@@ -103,7 +103,6 @@ const Dashboard = () => {
     { id: 'overview', name: 'Studio', icon: FiLayout },
     { id: 'reports', name: 'Reports', icon: FiDroplet },
     { id: 'favorites', name: 'Vault', icon: FiHeart },
-    { id: 'accessories', name: 'Accessories', icon: FiShoppingBag },
   ];
 
   const ReportModal = ({ report, onClose }) => {
@@ -289,10 +288,10 @@ const Dashboard = () => {
                       <h3 className="text-xl font-black uppercase tracking-tighter">Skin Lab</h3>
                       <div className="flex items-center gap-2 text-sm font-bold opacity-80 group-hover:translate-x-2 transition-all">Scan Tone <FiArrowRight /></div>
                     </div>
-                    <div className="group bg-gradient-to-br from-purple-500 to-purple-600 p-8 rounded-[2.5rem] text-white flex flex-col justify-between h-56 relative overflow-hidden shadow-2xl cursor-pointer" onClick={() => navigate('/accessory-match')}>
-                      <FiShoppingBag size={32} />
-                      <h3 className="text-xl font-black uppercase tracking-tighter">Accessory Match</h3>
-                      <div className="flex items-center gap-2 text-sm font-bold opacity-80 group-hover:translate-x-2 transition-all">Sync Accessories <FiArrowRight /></div>
+                    <div className="group bg-gradient-to-br from-purple-500 to-purple-600 p-8 rounded-[2.5rem] text-white flex flex-col justify-between h-56 relative overflow-hidden shadow-2xl cursor-pointer" onClick={() => navigate('/gallery')}>
+                      <FiImage size={32} />
+                      <h3 className="text-xl font-black uppercase tracking-tighter">Style Gallery</h3>
+                      <div className="flex items-center gap-2 text-sm font-bold opacity-80 group-hover:translate-x-2 transition-all">Explore Looks <FiArrowRight /></div>
                     </div>
                   </div>
                   
@@ -392,13 +391,7 @@ const Dashboard = () => {
                 </motion.div>
               )}
 
-              {activeTab === 'accessories' && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-96 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900/50 rounded-[3rem] border-2 border-dashed border-gray-200 dark:border-gray-800 p-10 text-center">
-                  <FiShoppingBag className="text-6xl text-gray-200 dark:text-gray-700 mb-6" />
-                  <h3 className="text-xl font-black uppercase tracking-tighter mb-2">Neural Accessory Link</h3>
-                  <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest max-w-xs">Integrating visual matching algorithms. Feature coming in next update.</p>
-                </motion.div>
-              )}
+
 
             </AnimatePresence>
           </div>
