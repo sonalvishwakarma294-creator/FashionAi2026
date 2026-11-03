@@ -150,6 +150,9 @@ def init_db(app):
                     from seed_gallery import seed
                     seed()
                     print(f'[DB] Auto-seed complete. Total outfits: {Outfit.query.count()}')
+            except Exception as e:
+                print(f'[DB] Auto-seed warning: {e}')
+
             try:
                 from models.user import User
                 import bcrypt
@@ -182,8 +185,6 @@ def init_db(app):
             except Exception as ue:
                 db.session.rollback()
                 print(f'[DB] Default users seed warning: {ue}')
-            except Exception as e:
-                print(f'[DB] Auto-seed warning: {e}')
         except Exception as e:
             print(f"[DB] create_all failed: {type(e).__name__}: {e}")
             print("[DB] Check credentials, permissions and MySQL server status.")
